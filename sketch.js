@@ -102,8 +102,8 @@ function mouseClicked() {
     }
   }
   else if (mouseY<(height-60)){
-    let posX = round(mouseX/10)*10;
-    let posY = round(mouseY/10)*10;
+    let posX = round(mouseX/25)*25;
+    let posY = round(mouseY/25)*25;
     p = new particle(posX,posY, q, mover, false);
     append(particles, p);
   }
