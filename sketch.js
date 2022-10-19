@@ -8,7 +8,7 @@ let q = 1;
 let k = 20;
 
 let deltat = 5.0;
-let spacing = 50;
+let spacing = 40;
 
 let radio1;
 let checkbox;
