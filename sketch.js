@@ -97,7 +97,7 @@ function draw() {
 function mouseClicked() {
   if (trashmode){
     for (let i = 0; i < particles.length; i += 1) {
-      if ((abs(mouseX-particles[i].x)<particles[i].radius) && (abs(mouseY-particles[i].y)<particles[i].radius)){
+      if ((abs(mouseX-particles[i].x)<particles[i].radius/2) && (abs(mouseY-particles[i].y)<particles[i].radius/2)){
         particles[i].flag = true;
       }
     }
