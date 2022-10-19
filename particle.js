@@ -42,13 +42,13 @@ class particle {
         let theta = calculateTheta(this, particles[i]);
         let r = dist(this.x, this.y, particles[i].x, particles[i].y);
         v += k*particles[i].q/r;
-        if (r>this.radius){
+        if (r>this.radius/2){
           let Fx = F*cos(theta);
           let Fy = F*sin(theta);
           sumFx += Fx;
           sumFy += Fy;
         } 
-        else if ((r < this.radius) & (this.move)) {
+        else if ((r < this.radius/2) & (this.move)) {
           this.flag = true;
           if (particles[i].move){
             particles[i].flag = true;
@@ -72,18 +72,18 @@ class particle {
       vx = this.vx + ax*deltat;
       vy = this.vy + ay*deltat;
 
-      if ((this.x + vx*deltat)>(width-this.radius)){
+      if ((this.x + vx*deltat)>(width-this.radius/2)){
         vx = -1.0001*vx;
       }
-      if ((this.x + vx*deltat)<this.radius){
+      if ((this.x + vx*deltat)<this.radius/2){
         vx = -1.0001*vx;
       }
 
-      if ((this.y + vy*deltat)>(height-this.radius)){
+      if ((this.y + vy*deltat)>(height-this.radius/2)){
         vy = -1.0001*vy;
       }
 
-      if ((this.y + vy*deltat)<this.radius){
+      if ((this.y + vy*deltat)<this.radius/2){
         vy = -1.0001*vy;
       }
 
