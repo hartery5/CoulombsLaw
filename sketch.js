@@ -25,25 +25,25 @@ function setup() {
   radio1.option(1, "q = +1");
   radio1.option(-1.0, "q = -1");
   radio1.selected("1");
-  radio1.style("width", "400px");
+  radio1.style("width", "1200px");
   radio1.style('color', '#ffffff');
   radio1.style('font-family', 'monospace');
-  radio1.style("font-size", "75px");
-  radio1.position(0,height-38);
+  radio1.style("font-size", "40px");
+  radio1.position(0,height-40);
   
   checkbox = createCheckbox('Static', false);
-  checkbox.style("width", "400px");
+  checkbox.style("width", "1200px");
   checkbox.style('color', '#ffffff');
   checkbox.style('font-family', 'monospace');
-  checkbox.style("font-size", "75px");
-  checkbox.position(0,height-93);
+  checkbox.style("font-size", "40px");
+  checkbox.position(0,height-80);
   
   checkbox2 = createCheckbox('Trash Mode', false);
-  checkbox2.style("width", "400px");
+  checkbox2.style("width", "1200px");
   checkbox2.style('color', '#ffffff');
   checkbox2.style('font-family', 'monospace');
-  checkbox2.style("font-size", "75px");
-  checkbox2.position(0,height-168);
+  checkbox2.style("font-size", "40px");
+  checkbox2.position(0,height-120);
   
 
 
