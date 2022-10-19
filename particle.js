@@ -12,7 +12,7 @@ class particle {
     this.V = 0
     this.Etheta = 0.0;
     this.flag = false;
-    this.radius = 5;
+    this.radius = 25;
     if (this.q>0){
       this.color = 'salmon';
     }
@@ -118,12 +118,12 @@ class particle {
       //  c = lerpColor(c1,c3,v);
       //}
       stroke(c);
-      strokeWeight(1);
+      strokeWeight(5);
       fill(c);
       translate(this.x,this.y);
       rotate(this.Etheta);
       line(0, 0, spacing/2, 0);
-      triangle(spacing/2, 1, spacing/2+1, 0, spacing/2, -1);
+      triangle(spacing/2, 5, spacing/2+5, 0, spacing/2, -5);
       pop();
     }
   }
