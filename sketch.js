@@ -5,7 +5,7 @@ let fixedCharges = [];
 let maxV = 0;
 
 let q = 1;
-let k = 15;
+let k = 20;
 
 let deltat = 5.0;
 let spacing = 50;
