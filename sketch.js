@@ -5,10 +5,10 @@ let fixedCharges = [];
 let maxV = 0;
 
 let q = 1;
-let k = 5;
+let k = 15;
 
 let deltat = 5.0;
-let spacing = 75;
+let spacing = 50;
 
 let radio1;
 let checkbox;
@@ -103,8 +103,8 @@ function mouseClicked() {
     }
   }
   else if (mouseY<(height-225)){
-    let posX = round(mouseX/25)*25;
-    let posY = round(mouseY/25)*25;
+    let posX = round(mouseX/40)*40;
+    let posY = round(mouseY/40)*40;
     p = new particle(posX,posY, q, mover, false);
     append(particles, p);
   }
