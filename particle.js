@@ -12,7 +12,7 @@ class particle {
     this.V = 0
     this.Etheta = 0.0;
     this.flag = false;
-    this.radius = 50;
+    this.radius = 40;
     if (this.q>0){
       this.color = 'salmon';
     }
@@ -107,7 +107,7 @@ class particle {
     }
     else{
       push();
-      let c1 = color(80,80,80,100);
+      let c1 = color(80,80,80);
       let c2 = color(180,255,180);
       let c3 = color(180,180,255);
       let v = map(log(abs(this.Emag)),-15,-6,0,1);
