@@ -5,10 +5,10 @@ let fixedCharges = [];
 let maxV = 0;
 
 let q = 1;
-let k = 2;
+let k = 5;
 
 let deltat = 5.0;
-let spacing = 20;
+let spacing = 100;
 
 let radio1;
 let checkbox;
@@ -19,7 +19,9 @@ let trashmode = false;
 
 function setup() {
   textFont('Courier New')
-  createCanvas(400, 400);
+  createCanvas(displayWidth, displayHeight);
+  
+  
 
   radio1 = createRadio();
   radio1.option(1, "q = +1");
