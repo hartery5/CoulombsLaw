@@ -12,7 +12,7 @@ class particle {
     this.V = 0
     this.Etheta = 0.0;
     this.flag = false;
-    this.radius = 25;
+    this.radius = 50;
     if (this.q>0){
       this.color = 'salmon';
     }
@@ -102,7 +102,7 @@ class particle {
       push();
       noStroke();
       fill(this.color);
-      circle(this.x, this.y, 10);
+      circle(this.x, this.y, this.radius);
       pop();
     }
     else{
