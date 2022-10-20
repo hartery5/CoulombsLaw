@@ -20,7 +20,7 @@ let trashmode = false;
 function setup() {
   textFont('Courier New')
   createCanvas(windowWidth, windowHeight);
-  spacing = round(windowWidth*windowHeight)/120;
+  spacing = round(windowWidth*windowHeight/80);
   
   radio1 = createRadio();
   radio1.option(1, "q = +1");
