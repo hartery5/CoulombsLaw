@@ -21,7 +21,7 @@ function setup() {
   textFont('Courier New')
   createCanvas(windowWidth, windowHeight);
   let density = displayDensity();
-  spacing = round(windowWidth*windowHeight/(density*10000);
+  spacing = round(width*height/(density*5000);
   
   radio1 = createRadio();
   radio1.option(1, "q = +1");
