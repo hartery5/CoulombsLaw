@@ -20,8 +20,8 @@ let trashmode = false;
 function setup() {
   textFont('Courier New')
   createCanvas(windowWidth, windowHeight);
-  //let density = displayDensity();
-  //spacing = width*height*density/10000;
+  let density = displayDensity();
+  spacing = width*height*density/20000;
   
   radio1 = createRadio();
   radio1.option(1, "q = +1");
