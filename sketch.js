@@ -9,6 +9,7 @@ let k = 20;
 
 let deltat = 5.0;
 let spacing = 40;
+let radius = 20;
 
 let radio1;
 let checkbox;
@@ -99,15 +100,37 @@ function draw() {
 function mouseClicked() {
   if (trashmode){
     for (let i = 0; i < particles.length; i += 1) {
-      if ((abs(mouseX-particles[i].x)<particles[i].radius/2) && (abs(mouseY-particles[i].y)<particles[i].radius/2)){
+      if ((abs(mouseX-particles[i].x)<particles[i].radius) && (abs(mouseY-particles[i].y)<particles[i].radius)){
         particles[i].flag = true;
       }
     }
   }
-  else if (mouseY<(height-225)){
-    let posX = round(mouseX/40)*40;
-    let posY = round(mouseY/40)*40;
-    p = new particle(posX,posY, q, mover, false);
+  else if (!mover){
+    let check = true;
+    for (let i = 0; i < particles.length; i += 1) {
+      if ((abs(mouseX-particles[i].x)<particles[i].radius) && (abs(mouseY-particles[i].y)<particles[i].radius)){
+        particles[i].q += q;
+        
+        if (particles[i].q == 0){
+          particles[i].flag = true;
+        }
+        
+        check = false;
+        break;
+      }
+    }
+    if ((check) && (mouseY<(height-60))){
+      let posX = round(mouseX/radius/2)*radius*2;
+      let posY = round(mouseY/radius/2)*radius*2;
+      p = new particle(posX, posY, q, radius, mover, false);
+      append(particles,p);
+    }
+  }
+  else if (mouseY<(height-60)){
+    let posX = round(mouseX/radius/2)*radius*2;
+    let posY = round(mouseY/radius/2)*radius*2;
+    p = new particle(posX,posY, q, radius, mover, false);
     append(particles, p);
   }
 }
+
