@@ -9,7 +9,7 @@ let k = 20;
 
 let deltat = 5.0;
 let spacing = 40;
-let radius = 20;
+let radius = 40;
 
 let radio1;
 let checkbox;
@@ -62,7 +62,7 @@ function setup() {
 
 function draw() {
   background(0);
-  q = radio1.value();
+  q = int(radio1.value());
   if (checkbox.checked()){
     mover = false;
   }
