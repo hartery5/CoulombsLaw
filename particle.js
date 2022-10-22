@@ -1,5 +1,5 @@
 class particle {
-  constructor(x, y, q, move, arrow){
+  constructor(x, y, q, r, move, arrow){
     this.x = x;
     this.y = y;
     this.q = q;
@@ -12,12 +12,12 @@ class particle {
     this.V = 0
     this.Etheta = 0.0;
     this.flag = false;
-    this.radius = 40;
+    this.radius = r;
     if (this.q>0){
-      this.color = 'salmon';
+      this.color = color('salmon');
     }
     else {
-      this.color = 'cornflowerblue';
+      this.color = color('cornflowerblue');
     }
   }
   
@@ -101,8 +101,20 @@ class particle {
     if (!this.arrow){
       push();
       noStroke();
-      fill(this.color);
-      circle(this.x, this.y, this.radius);
+      let v = map(abs(this.q),1,10,0,1);
+      let cmax;
+      if (this.q>0){
+        cmax = color(255,0,0);
+      } else {
+        cmax = color(0,0,255);
+      }
+      let c = lerpColor(this.color,cmax,v);
+      fill(c);
+      circle(this.x, this.y, this.radius*2);
+      textSize(this.radius);
+      textAlign(CENTER, CENTER);
+      fill('black')
+      text(nfp(this.q,1,0),this.x,this.y);
       pop();
     }
     else{
