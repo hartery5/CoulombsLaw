@@ -9,7 +9,7 @@ let k = 20;
 
 let deltat = 5.0;
 let spacing = 40;
-let radius = 40;
+let radius = 20;
 
 let radio1;
 let checkbox;
