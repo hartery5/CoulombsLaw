@@ -52,7 +52,7 @@ function setup() {
 
   for (let i = 10; i < width; i += spacing) {
     for (let j = 10; j < width; j += spacing) {
-      p = new particle(i, j, q, false, true);
+      p = new particle(i, j, q, radius, false, true);
       append(testParticles, p);
     }
   }
@@ -119,14 +119,14 @@ function mouseClicked() {
         break;
       }
     }
-    if ((check) && (mouseY<(height-60))){
+    if ((check) && (mouseY<(height-160))){
       let posX = round(mouseX/radius/2)*radius*2;
       let posY = round(mouseY/radius/2)*radius*2;
       p = new particle(posX, posY, q, radius, mover, false);
       append(particles,p);
     }
   }
-  else if (mouseY<(height-60)){
+  else if (mouseY<(height-160)){
     let posX = round(mouseX/radius/2)*radius*2;
     let posY = round(mouseY/radius/2)*radius*2;
     p = new particle(posX,posY, q, radius, mover, false);
