@@ -48,7 +48,7 @@ class particle {
           sumFx += Fx;
           sumFy += Fy;
         } 
-        else if ((r < this.radius/2) & (this.move)) {
+        else if ((r < this.radius) & (this.move)) {
           this.flag = true;
           if (particles[i].move){
             particles[i].flag = true;
@@ -72,18 +72,18 @@ class particle {
       vx = this.vx + ax*deltat;
       vy = this.vy + ay*deltat;
 
-      if ((this.x + vx*deltat)>(width-this.radius/2)){
+      if ((this.x + vx*deltat)>(width-this.radius)){
         vx = -1.0001*vx;
       }
-      if ((this.x + vx*deltat)<this.radius/2){
+      if ((this.x + vx*deltat)<this.radius){
         vx = -1.0001*vx;
       }
 
-      if ((this.y + vy*deltat)>(height-this.radius/2)){
+      if ((this.y + vy*deltat)>(height-this.radius)){
         vy = -1.0001*vy;
       }
 
-      if ((this.y + vy*deltat)<this.radius/2){
+      if ((this.y + vy*deltat)<this.radius){
         vy = -1.0001*vy;
       }
 
