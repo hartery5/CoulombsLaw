@@ -13,12 +13,6 @@ class particle {
     this.Etheta = 0.0;
     this.flag = false;
     this.radius = r;
-    if (this.q>0){
-      this.color = color('salmon');
-    }
-    else {
-      this.color = color('cornflowerblue');
-    }
   }
   
   update(particles, deltat) {
@@ -50,9 +44,11 @@ class particle {
         } 
         else if ((r < this.radius) & (this.move)) {
           this.flag = true;
-          if (particles[i].move){
-            particles[i].flag = true;
+          if (particles[i].move) {
+            particles[i].q += this.q;
+            particles[i].q = round(particles[i].q);
           }
+          return;
         }
       }
     }
@@ -103,12 +99,15 @@ class particle {
       noStroke();
       let v = map(abs(this.q),1,10,0,1);
       let cmax;
-      if (this.q>0){
-        cmax = color(255,0,0);
+      let cmin;
+      if (this.q > 0) {
+        cmin = color("salmon");
+        cmax = color(255, 0, 0);
       } else {
-        cmax = color(0,0,255);
+        cmin = color("cornflowerblue");
+        cmax = color(0, 0, 255);
       }
-      let c = lerpColor(this.color,cmax,v);
+      let c = lerpColor(cmin, cmax, v);
       fill(c);
       circle(this.x, this.y, this.radius*2);
       textSize(this.radius);
