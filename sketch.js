@@ -15,6 +15,9 @@ let slider;
 let checkbox;
 let checkbox2;
 
+let oldwidth;
+let oldheight;
+
 let mover = true;
 let trashmode = false;
 
@@ -23,6 +26,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   let density = displayDensity();
   spacing = width*height*density/25000;
+  oldwidth = width;
+  oldheight = height;
   
   slider = createSlider(-5, 5, 1);
   slider.position(3, 40);
@@ -43,8 +48,6 @@ function setup() {
   checkbox2.style("font-size", "40px");
   checkbox2.position(0,120);
   
-
-
   for (let i = 10; i < width; i += spacing) {
     for (let j = 10; j < width; j += spacing) {
       p = new particle(i, j, q, radius, false, true);
@@ -148,4 +151,21 @@ function clickevent(){
     p = new particle(posX, posY, q, radius, mover, false);
     append(particles, p);
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  let density = displayDensity();
+  spacing = width*height*density/25000;
+  
+  let nx = width/oldwidth;
+  let ny = height/oldheight
+  
+  for (let i=0; i < testParticles.length; i+=1){
+    testParticles[i].x *= nx;
+    testParticles[i].y *= ny;
+  }
+  
+  oldwidth = width;
+  oldheight = height;
 }
