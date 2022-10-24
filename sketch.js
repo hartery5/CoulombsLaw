@@ -38,15 +38,15 @@ function setup() {
   checkbox.style("width", "1200px");
   checkbox.style('color', '#ffffff');
   checkbox.style('font-family', 'monospace');
-  checkbox.style("font-size", "40px");
-  checkbox.position(0,60);
+  checkbox.style("font-size", "30px");
+  checkbox.position(0,50);
   
   checkbox2 = createCheckbox('Trash Mode', false);
   checkbox2.style("width", "1200px");
   checkbox2.style('color', '#ffffff');
   checkbox2.style('font-family', 'monospace');
-  checkbox2.style("font-size", "40px");
-  checkbox2.position(0,100);
+  checkbox2.style("font-size", "30px");
+  checkbox2.position(0,80);
   
   for (let i = 10; i < width; i += spacing) {
     for (let j = 10; j < width; j += spacing) {
@@ -98,7 +98,7 @@ function draw() {
   
   push();
   fill('black');
-  rect(0, 0, 450, 140);
+  rect(0, 0, 450, 120);
   pop();
   
   push();
@@ -139,13 +139,13 @@ function mousePressed() {
         break;
       }
     }
-    if (check && mouseY > 140 && abs(q) > 0) {
+    if (check && !(mouseY < 140 && mouseX < 450) && abs(q) > 0) {
       let posX = round(mouseX / radius / 2) * radius * 2;
       let posY = round(mouseY / radius / 2) * radius * 2;
       p = new particle(posX, posY, q, radius, mover, false);
       append(particles, p);
     }
-  } else if (mouseY > 140) {
+  } else if (!(mouseY < 140 && mouseX < 450)) {
     let posX = round(mouseX / radius / 2) * radius * 2;
     let posY = round(mouseY / radius / 2) * radius * 2;
     p = new particle(posX, posY, q, radius, mover, false);
@@ -159,13 +159,23 @@ function windowResized() {
   spacing = width*height*density/25000;
   
   let nx = width/oldwidth;
-  let ny = height/oldheight
+  let ny = height/oldheight;
+  
+  let n = sqrt(nx**2 + ny**2);
   
   for (let i=0; i < testParticles.length; i+=1){
     testParticles[i].x *= nx;
     testParticles[i].y *= ny;
   }
   
+  for (let i=0; i < particles.length; i+=1){
+    particles[i].x *= nx;
+    particles[i].y *= ny;
+    particles[i].r *= n;
+  }
+  
+  radius *= n;
+ 
   oldwidth = width;
   oldheight = height;
 }
