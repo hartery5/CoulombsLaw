@@ -175,6 +175,7 @@ function windowResized() {
   }
   
   radius *= nx*ny;
+  console.log(radius);
  
   oldwidth = width;
   oldheight = height;
