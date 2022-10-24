@@ -15,12 +15,12 @@ class particle {
     this.radius = r;
   }
   
-  update(particles, deltat) {
-    this.physics(particles, deltat);
+  update(particles, boundaries, deltat) {
+    this.physics(particles, boundaries, deltat);
     this.draw();
   }
   
-  physics(particles, deltat){
+  physics(particles, boundaries, deltat){
     let ax, ay, vx, vy, x, y;
     let sumFx = 0;
     let sumFy = 0;
@@ -64,32 +64,28 @@ class particle {
       ax = sumFx/this.mass;
       ay = sumFy/this.mass;
 
-
       vx = this.vx + ax*deltat;
       vy = this.vy + ay*deltat;
-
-      if ((this.x + vx*deltat)>(width-this.radius)){
-        vx = -0.9*vx;
-      }
-      if ((this.x + vx*deltat)<this.radius){
-        vx = -0.9*vx;
-      }
-
-      if ((this.y + vy*deltat)>(height-this.radius)){
-        vy = -0.9*vy;
-      }
-
-      if ((this.y + vy*deltat)<this.radius){
-        vy = -0.9*vy;
-      }
-
+      
       x = this.x + vx*deltat;
       y = this.y + vy*deltat;
+      
 
       this.vx = vx;
       this.vy = vy;
       this.x = x;
       this.y = y;
+      
+      for (let j = 0; j < boundaries.length; j +=1){
+        if (boundaries[j].bounce(this)){
+          let dotproduct = this.vx*boundaries[j].nx + this.vy*boundaries[j].ny;
+          print(this.vx, this.vy);
+          this.vx = this.vx - 2.0*dotproduct*boundaries[j].nx;
+          this.vy = this.vy - 2.0*dotproduct*boundaries[j].ny;
+          print(this.vx, this.vy);
+        }
+      }
+
     }
   }
     
@@ -130,12 +126,12 @@ class particle {
       //  c = lerpColor(c1,c3,v);
       //}
       stroke(c);
-      strokeWeight(5);
+      strokeWeight(0.15*this.radius);
       fill(c);
       translate(this.x,this.y);
       rotate(this.Etheta);
-      line(0, 0, spacing/2, 0);
-      triangle(spacing/2, 0.1*spacing/2, spacing/2+0.1*spacing/2, 0, spacing/2, -0.1*spacing/2);
+      line(0, 0, this.radius, 0);
+      triangle(this.radius, 0.1*this.radius, this.radius+0.1*this.radius, 0, this.radius, -0.1*this.radius);
       pop();
     }
   }
@@ -153,5 +149,3 @@ function calculateForceMagnitude(particle1, particle2){
   let F = -1.0*k*particle1.q*particle2.q/pow(r, 2);
   return F
 }
-  
-  
