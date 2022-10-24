@@ -13,6 +13,10 @@ class boundaryLine {
   }
   
   bounce(particle){
+    // I'd like to have come up with this on my own, but I didn't...
+    // Clever collision detection based on parameterization of a line.
+    // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
+    // Lots of issues with p5 Vectors for some reason... so all dot products are written verbose.
     let a = pow(this.l,2);
     let b = 2*((this.x1-particle.x)*(this.x2-this.x1) + (this.y1-particle.y)*(this.y2-this.y1));
     let c = pow(this.x1-particle.x,2) + pow(this.y1-particle.y,2) - pow(particle.radius,2);
@@ -23,8 +27,8 @@ class boundaryLine {
     } else {
       d = sqrt(d);
 
+      // Ye ol' quadratic formula. See St.Ex. for why only 1 sol'n needed.
       let t1 = (-b - d)/(2*a);
-      let t2 = (-b + d)/(2*a);
       
       if ((t1 >= 0) && (t1 <=1)){
         return true
