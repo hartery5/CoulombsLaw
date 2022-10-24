@@ -70,7 +70,6 @@ class particle {
       x = this.x + vx*deltat;
       y = this.y + vy*deltat;
       
-
       this.vx = vx;
       this.vy = vy;
       this.x = x;
@@ -79,13 +78,11 @@ class particle {
       for (let j = 0; j < boundaries.length; j +=1){
         if (boundaries[j].bounce(this)){
           let dotproduct = this.vx*boundaries[j].nx + this.vy*boundaries[j].ny;
-          print(this.vx, this.vy);
           this.vx = this.vx - 2.0*dotproduct*boundaries[j].nx;
           this.vy = this.vy - 2.0*dotproduct*boundaries[j].ny;
           print(this.vx, this.vy);
         }
       }
-
     }
   }
     
