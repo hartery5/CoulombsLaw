@@ -95,7 +95,7 @@ function draw() {
 
   for (let i = 0; i < particles.length; i += 1) {
     particles[i].update(particles, deltat);
-    if (particles[i].flag){
+    if (particles[i].flag || particles[i].q==0){
       particles.splice(i,1);
     }
   }
