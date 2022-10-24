@@ -26,7 +26,7 @@ function setup() {
   
   slider = createSlider(-5, 5, 1);
   slider.position(3, 40);
-  slider.style("width", "172px");
+  slider.style("width", "430px");
   slider.addClass("mySlider");
   
   checkbox = createCheckbox('Static', false);
@@ -58,14 +58,7 @@ function setup() {
 function draw() {
   background(0);
   q = int(slider.value());
-  push();
-  fill("white");
-  textAlign(CENTER, CENTER);
-  textFont("monospace");
-  for (let i = -5; i < 6; i++) {
-    text(nfp(i, 1, 0), (i + 5) * 16 + 10, 15);
-  }
-  pop();
+
   
   if (checkbox.checked()){
     mover = false;
@@ -99,13 +92,20 @@ function draw() {
       particles.splice(i,1);
     }
   }
+  
+  
+  push();
+  fill("white");
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  textFont("monospace");
+  for (let i = -5; i < 6; i++) {
+    text(nfp(i, 1, 0), (i + 5) * 40 + 10, 15);
+  }
+  pop();
 }
 
 function mouseClicked() {
-  clickevent();
-}
-
-function touchStarted(){
   clickevent();
 }
 
