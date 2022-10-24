@@ -96,6 +96,10 @@ function draw() {
     }
   }
   
+  push();
+  fill('black');
+  rect(0, 0, 500, 140);
+  pop();
   
   push();
   fill("white");
@@ -103,7 +107,7 @@ function draw() {
   textSize(30);
   textFont("monospace");
   for (let i = -5; i < 6; i++) {
-    text(nfp(i, 1, 0), (i + 5) * 40 + 10, 15);
+    text(nfp(i, 1, 0), (i + 5) * 42 + 10, 15);
   }
   pop();
 }
