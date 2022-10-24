@@ -30,7 +30,7 @@ function setup() {
   oldheight = height;
   
   slider = createSlider(-5, 5, 1);
-  slider.position(3, 40);
+  slider.position(10, 40);
   slider.style("width", "430px");
   slider.addClass("mySlider");
   
@@ -39,14 +39,14 @@ function setup() {
   checkbox.style('color', '#ffffff');
   checkbox.style('font-family', 'monospace');
   checkbox.style("font-size", "40px");
-  checkbox.position(0,80);
+  checkbox.position(0,60);
   
   checkbox2 = createCheckbox('Trash Mode', false);
   checkbox2.style("width", "1200px");
   checkbox2.style('color', '#ffffff');
   checkbox2.style('font-family', 'monospace');
   checkbox2.style("font-size", "40px");
-  checkbox2.position(0,120);
+  checkbox2.position(0,100);
   
   for (let i = 10; i < width; i += spacing) {
     for (let j = 10; j < width; j += spacing) {
@@ -100,7 +100,7 @@ function draw() {
   push();
   fill("white");
   textAlign(CENTER, CENTER);
-  textSize(40);
+  textSize(30);
   textFont("monospace");
   for (let i = -5; i < 6; i++) {
     text(nfp(i, 1, 0), (i + 5) * 40 + 10, 15);
@@ -139,13 +139,13 @@ function clickevent(){
         break;
       }
     }
-    if (check && mouseY > 160 && abs(q) > 0) {
+    if (check && mouseY > 140 && abs(q) > 0) {
       let posX = round(mouseX / radius / 2) * radius * 2;
       let posY = round(mouseY / radius / 2) * radius * 2;
       p = new particle(posX, posY, q, radius, mover, false);
       append(particles, p);
     }
-  } else if (mouseY > 160) {
+  } else if (mouseY > 140) {
     let posX = round(mouseX / radius / 2) * radius * 2;
     let posY = round(mouseY / radius / 2) * radius * 2;
     p = new particle(posX, posY, q, radius, mover, false);
