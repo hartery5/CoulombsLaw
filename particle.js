@@ -69,18 +69,18 @@ class particle {
       vy = this.vy + ay*deltat;
 
       if ((this.x + vx*deltat)>(width-this.radius)){
-        vx = -1.0001*vx;
+        vx = -0.9*vx;
       }
       if ((this.x + vx*deltat)<this.radius){
-        vx = -1.0001*vx;
+        vx = -0.9*vx;
       }
 
       if ((this.y + vy*deltat)>(height-this.radius)){
-        vy = -1.0001*vy;
+        vy = -0.9*vy;
       }
 
       if ((this.y + vy*deltat)<this.radius){
-        vy = -1.0001*vy;
+        vy = -0.9*vy;
       }
 
       x = this.x + vx*deltat;
@@ -111,6 +111,7 @@ class particle {
       fill(c);
       circle(this.x, this.y, this.radius*2);
       textSize(this.radius);
+      textFont('Courier New');
       textAlign(CENTER, CENTER);
       fill('black')
       text(nfp(this.q,1,0),this.x,this.y);
@@ -134,7 +135,7 @@ class particle {
       translate(this.x,this.y);
       rotate(this.Etheta);
       line(0, 0, spacing/2, 0);
-      triangle(spacing/2, 5, spacing/2+5, 0, spacing/2, -5);
+      triangle(spacing/2, 0.1*spacing/2, spacing/2+0.1*spacing/2, 0, spacing/2, -0.1*spacing/2);
       pop();
     }
   }
