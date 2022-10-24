@@ -98,7 +98,7 @@ function draw() {
   
   push();
   fill('black');
-  rect(0, 0, 500, 140);
+  rect(0, 0, 450, 140);
   pop();
   
   push();
@@ -112,11 +112,7 @@ function draw() {
   pop();
 }
 
-function mouseClicked() {
-  clickevent();
-}
-
-function clickevent(){
+function mousePressed() {
   if (trashmode) {
     for (let i = 0; i < particles.length; i += 1) {
       if (
