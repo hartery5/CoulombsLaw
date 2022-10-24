@@ -171,10 +171,10 @@ function windowResized() {
   for (let i=0; i < particles.length; i+=1){
     particles[i].x *= nx;
     particles[i].y *= ny;
-    particles[i].r *= n;
+    particles[i].r *= nx*ny;
   }
   
-  radius *= n;
+  radius *= nx*ny;
  
   oldwidth = width;
   oldheight = height;
