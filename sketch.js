@@ -11,7 +11,7 @@ let deltat = 5.0;
 let spacing = 40;
 let radius = 20;
 
-let radio1;
+let slider;
 let checkbox;
 let checkbox2;
 
@@ -24,29 +24,24 @@ function setup() {
   let density = displayDensity();
   spacing = width*height*density/25000;
   
-  radio1 = createRadio();
-  radio1.option(1, "q = +1");
-  radio1.option(-1.0, "q = -1");
-  radio1.selected("1");
-  radio1.style("width", "1200px");
-  radio1.style('color', '#ffffff');
-  radio1.style('font-family', 'monospace');
-  radio1.style("font-size", "40px");
-  radio1.position(0,height-40);
+  slider = createSlider(-5, 5, 1);
+  slider.position(3, 40);
+  slider.style("width", "172px");
+  slider.addClass("mySlider");
   
   checkbox = createCheckbox('Static', false);
   checkbox.style("width", "1200px");
   checkbox.style('color', '#ffffff');
   checkbox.style('font-family', 'monospace');
   checkbox.style("font-size", "40px");
-  checkbox.position(0,height-80);
+  checkbox.position(0,80);
   
   checkbox2 = createCheckbox('Trash Mode', false);
   checkbox2.style("width", "1200px");
   checkbox2.style('color', '#ffffff');
   checkbox2.style('font-family', 'monospace');
   checkbox2.style("font-size", "40px");
-  checkbox2.position(0,height-120);
+  checkbox2.position(0,120);
   
 
 
@@ -62,7 +57,16 @@ function setup() {
 
 function draw() {
   background(0);
-  q = int(radio1.value());
+  q = int(slider.value());
+  push();
+  fill("white");
+  textAlign(CENTER, CENTER);
+  textFont("monospace");
+  for (let i = -5; i < 6; i++) {
+    text(nfp(i, 1, 0), (i + 5) * 16 + 10, 15);
+  }
+  pop();
+  
   if (checkbox.checked()){
     mover = false;
   }
@@ -98,39 +102,50 @@ function draw() {
 }
 
 function mouseClicked() {
-  if (trashmode){
+  clickevent();
+}
+
+function touchStarted(){
+  clickevent();
+}
+
+function clickevent(){
+  if (trashmode) {
     for (let i = 0; i < particles.length; i += 1) {
-      if ((abs(mouseX-particles[i].x)<particles[i].radius) && (abs(mouseY-particles[i].y)<particles[i].radius)){
+      if (
+        abs(mouseX - particles[i].x) < particles[i].radius &&
+        abs(mouseY - particles[i].y) < particles[i].radius
+      ) {
         particles[i].flag = true;
       }
     }
-  }
-  else if (!mover){
+  } else if (!mover) {
     let check = true;
     for (let i = 0; i < particles.length; i += 1) {
-      if ((abs(mouseX-particles[i].x)<particles[i].radius) && (abs(mouseY-particles[i].y)<particles[i].radius)){
+      if (
+        abs(mouseX - particles[i].x) < particles[i].radius &&
+        abs(mouseY - particles[i].y) < particles[i].radius
+      ) {
         particles[i].q += q;
-        
-        if (particles[i].q == 0){
+
+        if (particles[i].q == 0) {
           particles[i].flag = true;
         }
-        
+
         check = false;
         break;
       }
     }
-    if ((check) && (mouseY<(height-160))){
-      let posX = round(mouseX/radius/2)*radius*2;
-      let posY = round(mouseY/radius/2)*radius*2;
+    if (check && mouseY > 160 && abs(q) > 0) {
+      let posX = round(mouseX / radius / 2) * radius * 2;
+      let posY = round(mouseY / radius / 2) * radius * 2;
       p = new particle(posX, posY, q, radius, mover, false);
-      append(particles,p);
+      append(particles, p);
     }
-  }
-  else if (mouseY<(height-160)){
-    let posX = round(mouseX/radius/2)*radius*2;
-    let posY = round(mouseY/radius/2)*radius*2;
-    p = new particle(posX,posY, q, radius, mover, false);
+  } else if (mouseY > 160) {
+    let posX = round(mouseX / radius / 2) * radius * 2;
+    let posY = round(mouseY / radius / 2) * radius * 2;
+    p = new particle(posX, posY, q, radius, mover, false);
     append(particles, p);
   }
 }
-
