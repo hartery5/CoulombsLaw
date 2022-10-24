@@ -9,7 +9,7 @@ let k = 20;
 
 let deltat = 5.0;
 let spacing = 40;
-let radius = 20;
+let radius;
 
 let slider;
 let checkbox;
@@ -26,8 +26,10 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   let density = displayDensity();
   spacing = width*height*density/25000;
+  radius = spacing/2;
   oldwidth = width;
   oldheight = height;
+  oldradius = radius;
   
   slider = createSlider(-5, 5, 1);
   slider.position(10, 40);
@@ -157,11 +159,11 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   let density = displayDensity();
   spacing = width*height*density/25000;
+  radius = spacing/2;
   
   let nx = width/oldwidth;
   let ny = height/oldheight;
-  
-  let n = sqrt(nx**2 + ny**2);
+  let nr = radius/oldradius;
   
   for (let i=0; i < testParticles.length; i+=1){
     testParticles[i].x *= nx;
@@ -171,12 +173,10 @@ function windowResized() {
   for (let i=0; i < particles.length; i+=1){
     particles[i].x *= nx;
     particles[i].y *= ny;
-    particles[i].r *= nx*ny;
+    particles[i].r *= nr;
   }
-  
-  radius *= nx*ny;
-  console.log(radius);
  
   oldwidth = width;
   oldheight = height;
+  oldradius = radius;
 }
