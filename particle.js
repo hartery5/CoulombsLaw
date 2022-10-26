@@ -144,9 +144,7 @@ class particle {
       let c3 = color(180,180,255);
 
       if (showV){
-        translate(_spacing/2,_spacing/2);
         v = map(log(abs(this.V)),-6,2,0,1);
-        print(v)
         if (this.V>0){
           c = lerpColor(c1,c2,v);
         } else {
@@ -155,10 +153,10 @@ class particle {
         strokeWeight(0.1);
         stroke(c);
         fill(c);
-        rect(-_spacing,-_spacing,_spacing,_spacing);
-        translate(-1.0*_spacing/2,-1.0*_spacing/2);
+        rectMode(CENTER);
+        rect(0, 0, ospacing*_nx, ospacing*_ny);
       }
-      
+      print("hi");
       c1 = color(80,80,80);
       v = map(log(abs(this.Emag)),-15,-6,0,1);
       c = lerpColor(c1,c2,v);
