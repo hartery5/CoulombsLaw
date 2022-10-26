@@ -441,10 +441,10 @@ function setBoundaries(){
 }
 
 function setDimensions(){
-  _spacing = sqrt(width*height/1000);
+  _spacing = sqrt(width*height/500);
   spacing = fac*_spacing;
   radius = fac*_spacing/2;
-  fs = 2*_spacing/2;
+  fs = _spacing;
   if (menuOpen){
     lowerbound = 12*fs;
   } else {
