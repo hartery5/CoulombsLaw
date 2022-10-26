@@ -1,46 +1,47 @@
 class particle {
-  constructor(x, y, q, r, move, arrow){
+  constructor(x, y, vx, vy, m, q, r, move, arrow){
     this.x = x;
     this.y = y;
     this.q = q;
     this.move = move;
     this.type = move;
     this.arrow = arrow;
-    this.mass = 1.0;
-    this.vx = 0.0;
-    this.vy = 0.0;
-    this.V = 0
+    this.mass = m;
+    this.vx = vx;
+    this.vy = vy;
+    this.ax = 0.0;
+    this.ay = 0.0;
+    this.V = 0;
+    this.t = 0;
     this.Etheta = 0.0;
     this.flag = false;
     this.radius = r;
   }
   
-  update(particles, boundaries, deltat) {
-    this.physics(particles, boundaries, deltat);
-    this.draw();
-  }
-  
   physics(particles, boundaries, deltat){
     let ax, ay, vx, vy, x, y;
-    let sumFx = 0;
-    let sumFy = 0;
+    let sumFx = 0.0;
+    let sumFy = 0.0;
     let v = 0;
     
-
     for (let i = 0; i<particles.length; i+=1){
       if (particles[i] == this){
         continue
       }
       else {
-        let F = calculateForceMagnitude(this, particles[i]);
+        let F = Coulomb(this, particles[i]);
         let theta = calculateTheta(this, particles[i]);
         let r = dist(this.x, this.y, particles[i].x, particles[i].y);
         v += k*particles[i].q/r;
-        if (r>this.radius/2){
+        if (r>this.radius){
           let Fx = F*cos(theta);
           let Fy = F*sin(theta);
           sumFx += Fx;
           sumFy += Fy;
+          
+          if (showF && !this.arrow){
+            this.showArrow(F,theta);
+          }
         } 
         else if ((r < this.radius) & (this.move)) {
           this.flag = true;
@@ -57,33 +58,56 @@ class particle {
     if (this.V>maxV){
       maxV = this.V;
     }
-    this.Emag = sumFx**2 + sumFy**2;
+    this.Emag = pow(sumFx,2) + pow(sumFy,2);
     this.Etheta = atan2(sumFy,sumFx);
 
     if (this.move){
-      ax = sumFx/this.mass;
-      ay = sumFy/this.mass;
+      ax = (sumFx+this.q*this.vy*Bz)/this.mass;
+      ay = (sumFy-this.q*this.vx*Bz)/this.mass;
 
+      // Verlet
       vx = this.vx + ax*deltat;
       vy = this.vy + ay*deltat;
+
+      x = this.x + vx*deltat;
+      y = this.y + vy*deltat;
+      
+      for (let j = 0; j < boundaries.length; j +=1){
+        if (boundaries[j].bounce(x,y,this.radius)){
+          let dotproduct = vx*boundaries[j].nx + vy*boundaries[j].ny;
+          vx += - 2.0*dotproduct*boundaries[j].nx;
+          vy += - 2.0*dotproduct*boundaries[j].ny;
+        }
+      }
       
       x = this.x + vx*deltat;
       y = this.y + vy*deltat;
       
+      this.ax = ax;
+      this.ay = ay;
       this.vx = vx;
       this.vy = vy;
       this.x = x;
       this.y = y;
-      
-      for (let j = 0; j < boundaries.length; j +=1){
-        if (boundaries[j].bounce(this)){
-          let dotproduct = this.vx*boundaries[j].nx + this.vy*boundaries[j].ny;
-          this.vx = this.vx - 2.0*dotproduct*boundaries[j].nx;
-          this.vy = this.vy - 2.0*dotproduct*boundaries[j].ny;
-          print(this.vx, this.vy);
-        }
-      }
+      this.t += 1;
     }
+  }
+  
+  showArrow(F,theta){
+    F *= 10000;
+    push();
+    fill(255);
+    stroke(255);
+    strokeWeight(0.15*this.radius);
+    // Move to center
+    translate(this.x,this.y);
+    // Rotate along axis
+    rotate(theta);
+    // Move to edge
+    translate(Math.sign(F)*this.radius,0);
+    line(0, 0, F, 0);
+    triangle(F, 0.1*this.radius, F+Math.sign(F)*0.1*this.radius, 0, F, -0.1*this.radius);
+    pop();
   }
     
   draw(){
@@ -112,20 +136,35 @@ class particle {
     }
     else{
       push();
-      let c1 = color(80,80,80);
+      translate(this.x,this.y);
+      
+      let c, v;
+      let c1 = color(0,0,0,0);
       let c2 = color(180,255,180);
       let c3 = color(180,180,255);
-      let v = map(log(abs(this.Emag)),-15,-6,0,1);
-      let c;
-      //if (this.V>0){
+
+      if (showV){
+        translate(_spacing/2,_spacing/2);
+        v = map(log(abs(this.V)),-6,2,0,1);
+        print(v)
+        if (this.V>0){
+          c = lerpColor(c1,c2,v);
+        } else {
+          c = lerpColor(c1,c3,v); 
+        }
+        strokeWeight(0.1);
+        stroke(c);
+        fill(c);
+        rect(-_spacing,-_spacing,_spacing,_spacing);
+        translate(-1.0*_spacing/2,-1.0*_spacing/2);
+      }
+      
+      c1 = color(80,80,80);
+      v = map(log(abs(this.Emag)),-15,-6,0,1);
       c = lerpColor(c1,c2,v);
-      //} else {
-      //  c = lerpColor(c1,c3,v);
-      //}
       stroke(c);
       strokeWeight(0.15*this.radius);
       fill(c);
-      translate(this.x,this.y);
       rotate(this.Etheta);
       line(0, 0, this.radius, 0);
       triangle(this.radius, 0.1*this.radius, this.radius+0.1*this.radius, 0, this.radius, -0.1*this.radius);
@@ -141,7 +180,7 @@ function calculateTheta(particle1, particle2){
   return theta
 }
   
-function calculateForceMagnitude(particle1, particle2){
+function Coulomb(particle1, particle2){
   let r = dist(particle1.x, particle1.y, particle2.x, particle2.y);
   let F = -1.0*k*particle1.q*particle2.q/pow(r, 2);
   return F
