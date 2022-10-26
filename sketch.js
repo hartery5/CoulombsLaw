@@ -39,9 +39,15 @@ let fs;
 let lowerbound;
 let rightbound;
 let _spacing;
+let _aspect;
 let spacing;
 let radius;
 let fac = 1;
+let _nx = 1;
+let _ny = 1;
+let ospacing;
+let fwidth;
+let fheight;
 
 // Flags
 let mover = true;
@@ -93,7 +99,6 @@ function setup() {
   }
   maxI = I;
   maxJ = J;
-  print(maxI, maxJ);
   
   // Boundaries
   setBoundaries();
@@ -104,6 +109,9 @@ function setup() {
   oldwidth = width;
   oldheight = height;
   oldradius = radius; 
+  ospacing = spacing;
+  fwidth = width;
+  fheight = height;
 }
 
 function draw() {
@@ -238,12 +246,14 @@ function windowResized() {
   
   let nx = width/oldwidth;
   let ny = height/oldheight;
+  _nx = width/fwidth;
+  _ny = height/fheight;
   let nr = radius/oldradius;
   
   boundaries = [];
   setBoundaries();
   
-  k *= nx*ny;
+  k *= _nx*_ny;
   
   for (let i=0; i < maxI; i+=1){
     for (let j=0; j < maxJ; j+=1){
@@ -442,6 +452,7 @@ function setBoundaries(){
 
 function setDimensions(){
   _spacing = sqrt(width*height/500);
+  _aspect = width/height;
   spacing = fac*_spacing;
   radius = fac*_spacing/2;
   fs = _spacing;
