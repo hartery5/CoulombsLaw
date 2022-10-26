@@ -156,7 +156,7 @@ class particle {
         rectMode(CENTER);
         rect(0, 0, ospacing*_nx, ospacing*_ny);
       }
-      print("hi");
+
       c1 = color(80,80,80);
       v = map(log(abs(this.Emag)),-15,-6,0,1);
       c = lerpColor(c1,c2,v);
