@@ -7,19 +7,15 @@ class boundaryLine {
     this.theta = abs(atan2(this.y2-this.y1, this.x2-this.x1) + PI/2);
     this.dx = this.x2-this.x1;
     this.dy = this.y2-this.y1;
-    this.l = sqrt(pow(this.x2-this.x1,2)+pow(this.y2-this.y1,2));
-    this.nx = -1.0*this.dy/this.l;
-    this.ny = this.dx/this.l;
+    this.mag = sqrt(pow(this.x2-this.x1,2)+pow(this.y2-this.y1,2));
+    this.nx = -1.0*this.dy/this.mag;
+    this.ny = this.dx/this.mag;
   }
   
-  bounce(particle){
-    // I'd like to have come up with this on my own, but I didn't...
-    // Clever collision detection based on parameterization of a line.
-    // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
-    // Lots of issues with p5 Vectors for some reason... so all dot products are written verbose.
-    let a = pow(this.l,2);
-    let b = 2*((this.x1-particle.x)*(this.x2-this.x1) + (this.y1-particle.y)*(this.y2-this.y1));
-    let c = pow(this.x1-particle.x,2) + pow(this.y1-particle.y,2) - pow(particle.radius,2);
+  bounce(x, y, r){
+    let a = pow(this.mag,2);
+    let b = 2*((this.x1-x)*(this.x2-this.x1) + (this.y1-y)*(this.y2-this.y1));
+    let c = pow(this.x1-x,2) + pow(this.y1-y,2) - pow(r,2);
     
     let d = b*b - 4*a*c;
     if (d < 0){
@@ -27,10 +23,10 @@ class boundaryLine {
     } else {
       d = sqrt(d);
 
-      // Ye ol' quadratic formula. See St.Ex. for why only 1 sol'n needed.
       let t1 = (-b - d)/(2*a);
+      let t2 = (-b + d)/(2*a);
       
-      if ((t1 >= 0) && (t1 <=1)){
+      if (((t1 >= 0) && (t1 <=1)) || ((t2>=0) && (t2<=1))){
         return true
       }
     }
