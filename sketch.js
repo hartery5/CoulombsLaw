@@ -15,8 +15,7 @@ let deltat = 5.0;
 let Bz;
 let theta_i = 0.0;
 let v0;
-let maxV = 0;
-let mass = 1.0;
+let mass;
 
 // DOM Elements
 let slider;
@@ -91,7 +90,7 @@ function setup() {
     testParticles[I] = [];
     J = 0;
     for (let j = spacing/2; j < height+spacing/2; j += spacing) {
-      p = new particle(i, j, 0.0, 0.0, mass, q, spacing/2, false, true);
+      p = new particle(i, j, 0.0, 0.0, 1.0, q, spacing/2, false, true);
       testParticles[I][J] = p;
       J += 1;
     }
@@ -104,7 +103,7 @@ function setup() {
   setBoundaries();
   
   // Test Charge
-  testCharge = new particle(0, 0, 0.0, 0.0, mass, q, spacing/2, false, false);
+  testCharge = new particle(0, 0, 0.0, 0.0, 1.0, q, spacing/2, false, false);
   
   oldwidth = width;
   oldheight = height;
@@ -140,7 +139,9 @@ function draw() {
   }
   
   // Show B-Field
-  showBField();
+  if (abs(Bz)>0){
+    showBField();
+  }
 
   // Apply physics & show particles
   let newParticles = [];
@@ -253,7 +254,7 @@ function windowResized() {
   boundaries = [];
   setBoundaries();
   
-  k *= _nx*_ny;
+  k *= nx*ny;
   
   for (let i=0; i < maxI; i+=1){
     for (let j=0; j < maxJ; j+=1){
@@ -313,13 +314,13 @@ function updateMenu(){
     text("vi = " + nfp(v0,1,1),100+fs,3.5*fs);
     text("Static", 20, 4.5*fs);
     text("Trash Mode", 20, 5.5*fs);
-    text("Show E Field", 20, 6.5*fs);
+    text("Show E", 20, 6.5*fs);
     if (showE){
-      text("Show V", 7*fs*1.3/2+20, 6.5*fs);
+      text("Show V", 5*fs*1.3/2+20, 6.5*fs);
     }
-    text("Show F Vectors", 20, 7.5*fs);
+    text("Show F", 20, 7.5*fs);
     if (showF){
-      text("Test Charge", 7*fs*1.3/2+20, 7.5*fs);
+      text("Test Charge", 5*fs*1.3/2+20, 7.5*fs);
     }
     text("Magnetic Field, B:",20, 8.5*fs);
     text("Mass, m:",20, 9.5*fs);
@@ -427,11 +428,11 @@ function placeDOM(){
   checkbox4.position(0,7.5*fs);
   checkbox5.style("width", "1200px");
   checkbox5.style('color', '#ffffff');
-  checkbox5.position(7*fs*1.3/2,7.5*fs);
+  checkbox5.position(5*fs*1.3/2,7.5*fs);
   checkbox5.hide(); 
   checkbox6.style("width", "1200px");
   checkbox6.style('color', '#ffffff');
-  checkbox6.position(7*fs*1.3/2,6.5*fs);
+  checkbox6.position(5*fs*1.3/2,6.5*fs);
   checkbox6.hide(); 
 }
 
@@ -451,7 +452,7 @@ function setBoundaries(){
 }
 
 function setDimensions(){
-  _spacing = sqrt(width*height/500);
+  _spacing = sqrt(width*height/400);
   _aspect = width/height;
   spacing = fac*_spacing;
   radius = fac*_spacing/2;
@@ -461,7 +462,7 @@ function setDimensions(){
   } else {
     lowerbound = 2*fs; 
   }
-  rightbound = 12*fs*1.42/2;
+  rightbound = 11*fs*1.42/2;
 }
 
 function hideDOM(){
@@ -518,7 +519,7 @@ function showBField(){
   let c = lerpColor(color(0,0,0,0),color(0,0,0,255),v);
   fill(c);
   strokeWeight(0);
-  rect(-w,-w,2*w,2*w);
+  rect(-w, -w, 2*w, 3*w);
   
   c = lerpColor(cmin,cmax,v);
       
@@ -544,6 +545,8 @@ function showBField(){
   textAlign(CENTER, CENTER);
   textSize(fs/2);
   textFont("monospace");
+  let s = String.fromCharCode('0x20D1');
+  text(s, 0, 1.5*w-0.05*fs);
   text("B", 0, 1.5*w);
   pop(); 
 }
