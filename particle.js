@@ -19,6 +19,7 @@ class particle {
   }
   
   physics(particles, boundaries, deltat){
+    let F, Fx, Fy, theta, r
     let ax, ay, vx, vy, x, y;
     let sumFx = 0.0;
     let sumFy = 0.0;
@@ -29,13 +30,13 @@ class particle {
         continue
       }
       else {
-        let F = Coulomb(this, particles[i]);
-        let theta = calculateTheta(this, particles[i]);
-        let r = dist(this.x, this.y, particles[i].x, particles[i].y);
+        F = Coulomb(this, particles[i]);
+        theta = calculateTheta(this, particles[i]);
+        r = dist(this.x, this.y, particles[i].x, particles[i].y);
         v += k*particles[i].q/r;
         if (r>this.radius){
-          let Fx = F*cos(theta);
-          let Fy = F*sin(theta);
+          Fx = F*cos(theta);
+          Fy = F*sin(theta);
           sumFx += Fx;
           sumFy += Fy;
           
@@ -55,9 +56,6 @@ class particle {
     }
     
     this.V = v;
-    if (this.V>maxV){
-      maxV = this.V;
-    }
     this.Emag = pow(sumFx,2) + pow(sumFy,2);
     this.Etheta = atan2(sumFy,sumFx);
 
@@ -156,7 +154,6 @@ class particle {
         rectMode(CENTER);
         rect(0, 0, ospacing*_nx, ospacing*_ny);
       }
-
       c1 = color(80,80,80);
       v = map(log(abs(this.Emag)),-15,-6,0,1);
       c = lerpColor(c1,c2,v);
