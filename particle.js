@@ -16,6 +16,8 @@ class particle {
     this.Etheta = 0.0;
     this.flag = false;
     this.radius = r;
+    this.bit = 0;
+    this.linetype=0;
   }
   
   physics(particles, boundaries, deltat){
@@ -137,12 +139,12 @@ class particle {
       translate(this.x,this.y);
       
       let c, v;
-      let c1 = color(0,0,0,0);
+      let c1 = color(0,0,0);
       let c2 = color(180,255,180);
       let c3 = color(180,180,255);
 
       if (showV){
-        v = map(log(abs(this.V)),-6,2,0,1);
+        v = map(log(abs(this.V)),-3,1,0,1);
         if (this.V>0){
           c = lerpColor(c1,c2,v);
         } else {
@@ -154,17 +156,87 @@ class particle {
         rectMode(CENTER);
         rect(0, 0, ospacing*_nx, ospacing*_ny);
       }
-      c1 = color(80,80,80);
-      v = map(log(abs(this.Emag)),-15,-6,0,1);
-      c = lerpColor(c1,c2,v);
-      stroke(c);
-      strokeWeight(0.15*this.radius);
-      fill(c);
-      rotate(this.Etheta);
-      line(0, 0, this.radius, 0);
-      triangle(this.radius, 0.1*this.radius, this.radius+0.1*this.radius, 0, this.radius, -0.1*this.radius);
+      
+      if (!hideArr){
+        c1 = color(80,80,80);
+        v = map(log(abs(this.Emag)),-15,-6,0,1);
+        c = lerpColor(c1,c2,v);
+        stroke(c);
+        strokeWeight(0.15*this.radius);
+        fill(c);
+        rotate(this.Etheta);
+        line(0, 0, 0.9*this.radius, 0);
+        triangle(0.9*this.radius, 0.1*this.radius, 0.9*this.radius+0.1*this.radius, 0, 0.9*this.radius, -0.1*this.radius);
+      }
       pop();
     }
+  }
+  
+  flip(c){
+    if (this.V>=c){
+      this.bit = 1; 
+    } else {
+      this.bit = 0; 
+    }
+  }
+  
+  showiso(){
+    push();
+    translate(this.x,this.y);
+    let spacingx = spacing;
+    let spacingy = spacing;
+
+    strokeWeight(2);
+    stroke(255);
+    switch(this.linetype){
+      case 0:
+        break;
+      case 1:
+        line(0,-spacingy/2,spacingx/2,0);
+        break;
+      case 2:
+        line(spacingx/2,0,spacingx,-spacingy/2);
+        break;
+      case 3:
+        line(0,-spacingy/2,spacingx,-spacingy/2);
+        break;
+      case 4:
+        line(spacingx/2,-spacingy,spacingx,-spacingy/2);
+        break;
+      case 5:
+        line(spacingx/2,0,spacingx,-spacingy/2);
+        line(0,-spacingy/2,spacingx/2,-spacingy);
+        break;
+      case 6:
+        line(spacingx/2,0,spacingx/2,-spacingy);
+        break;
+      case 7:
+        line(0,-spacingy/2,spacingx/2,-spacingy);
+        break;
+      case 8:
+        line(0,-spacingy/2,spacingx/2,-spacingy);
+        break;
+      case 9:
+        line(spacingx/2,0,spacingx/2,-spacingy);
+        break;
+      case 10:
+        line(0,-spacingy/2,spacingx/2,0);
+        line(spacingx/2,-spacingy,spacingx,-spacingy/2);
+        break;
+      case 11:
+        line(spacingx/2,-spacingy,spacingx,-spacingy/2);
+        break;
+      case 12:
+        line(0,-spacingy/2,spacingx,-spacingy/2);
+        break;
+      case 13:
+        line(spacingx/2,0,spacingx,-spacingy/2);
+        break;
+      case 14:
+        line(0,-spacingy/2,spacingx/2,0);
+        break;
+    }
+    pop();
   }
 }
   
