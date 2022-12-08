@@ -25,7 +25,15 @@ Since electrons mutually repel each other, they can only occupy certain orbital 
 
 To encapsulate the effects above, we should desire an expression of the force between charges to depend on the separation distance, sign, and magnitude of the charges. Coulomb's Law satisfies these three necessities and is commonly presented as follows:
 
-$|F_{1\rightarrow2}| = k \frac{|q_1||q_2|}{r^2}$
+$|\vec{F}_{1\rightarrow2}| = k \frac{|q_1||q_2|}{r^2}$
+
+$|\vec{F}_{1\rightarrow2}|$: Magnitude of force exerted on particle 1 by particle 2 (N)
+$k$: Coulomb's Constant,  8.99×10^9 (N⋅m^2/C^2)
+$|q_1|$: Magnitude of charge contained by particle 1 (C)
+$|q_2|$: Magnitude of charge contained by particle 2 (C)
+$r$: Distance between particle 1 and particle 2 (m)
+
+Notice that the above is formulated in terms of magnitude. While Coulomb's Law can be expressed in a vector form, it is often desirable in an algebra-based setting to have separate rules for calculating magnitude the magnitude of the force and direction.
 
 
 # References
