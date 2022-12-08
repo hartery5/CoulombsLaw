@@ -17,7 +17,7 @@ $q_e =  1.602176634×10^{-19} C$
 Thus, the value $q_e$ is often referred to as the "elementary charge". 
 
 #### Atoms
-The basic structure of an atom consists of a nucleus comprised of protons and neutrons, with exterior electron "shells". Each electron possesses a charge of -1$q_e$, while protons possess a charge of 1$q_e$. Neutrons have a charge of 0. Though these fundamental particles possess mass, it is not their mutual gravitaional attraction that keeps an atom intact. Instead, there must be other forces of attraction which preserve this basic atomic structure. In particular, Coulomb's Law describes a force of attraction between charges of opposite sign. Thus, the electrons and protons are said to mutually attract.[^2]
+The basic structure of an atom consists of a nucleus comprised of protons and neutrons, with exterior electron "shells". Each electron possesses a charge of -1$q_e$, while protons possess a charge of 1$q_e$. Neutrons have a charge of 0. Though these fundamental particles possess mass, it is not their mutual gravitaional attraction that keeps an atom intact. Instead, there must be other forces of attraction which preserve this basic atomic structure. In particular, Coulomb's Law describes a force of attraction between charges of opposite sign. Thus, the electrons and protons are said to mutually attract [^2].
 
 
 
