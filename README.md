@@ -11,7 +11,7 @@ Let's start with a definition of charge.
 ### Electric Charge, q (C): 
 A discrete, intrinsic variable of fundamental particles. May be positive or negative. Commonly appears as the symbol, $q$, with units of Coulombs, C, in the SI system.
 
-One of the crowning achievements of modern Physics was the discovery that the smallest amount of charge that any object can possess^[1]^ is:
+One of the crowning achievements of modern Physics was the discovery that the smallest amount of charge that any object can possess<sup>[1](#myfootnote1)</sup> is:
 $q_e =  1.602176634×10^{-19} C$
 
 Thus, the value $q_e$ is often referred to as the "elementary charge". 
@@ -21,5 +21,5 @@ The basic structure of an atom consists of a nucleus comprised of protons and ne
 
 
 
-^[1]^ Strictly speaking, the quarks that make up the proton neutron posess fractional charge, e.g. an "up" quark has a charge of $\sfrac{2}{3}q_e$, but quarks have never been observed in isolation (at least not since the Big Bang), while it quite common to see electrons or protons on their own. Thus, on matter of practicality, scientists typically stick to the definition of the elementary charge given above.
+<a name="myfootnote1">1</a> Strictly speaking, the quarks that make up the proton neutron posess fractional charge, e.g. an "up" quark has a charge of $\sfrac{2}{3}q_e$, but quarks have never been observed in isolation (at least not since the Big Bang), while it quite common to see electrons or protons on their own. Thus, on matter of practicality, scientists typically stick to the definition of the elementary charge given above.
 ^[2]^ What keeps the neutrons bound to the nucleus??? I hear you screaming. This is... quit a bit more complicated. At "large" distances, models of the nucleus predict a much stronger "Coulomb-like" force of attraction exists between neutrons and protons. By necessity, however, there must also be a force of repulsion that prevents the nucleus from collapsing into itself. The force which exhibits this duality is often called the "Nuclear force" and is modelled via various potentials such as the Yukawa potential. Diving deeper, however, one may recall from Footnote 1 that protons and neutrons are composed of quarks. The so-called "Nuclear Force" is really just a residual force that arises from a Strong Interaction between these particles. As far as we know, this is the end of the rabbit-hole (so to speak). Modern Physics formulates the Strong Interaction felt between quarks as arising from the fundamental property of "color charge". Quarks are said to come in 6 distinct colors, where quantum chromodynamics (QCD) predicts the mutual influence of pairs of quarks on each other owing to their color charge.
