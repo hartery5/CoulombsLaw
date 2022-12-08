@@ -8,7 +8,7 @@ While more complicated formulations of Coulombs Law exist, what follows is a bas
 
 Let's start with a definition of charge.
 
-###Electric Charge, q (C):** 
+###Electric Charge, q (C): 
 A discrete, intrinsic variable of fundamental particles. May be positive or negative. Commonly appears as the symbol, $q$, with units of Coulombs, C, in the SI system.
 
 One of the crowning achievements of modern Physics was the discovery that the smallest amount of charge that any object can possess[^1] is:
