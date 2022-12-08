@@ -21,7 +21,14 @@ To understand how charged particles interact and influence each other, it is com
 
 Though the fundamental particles possess mass, the miniscule amount of mass each particle possesses means that it is not their mutual gravitational attraction that keeps an atom intact. Instead, there must be other (stronger) forces of attraction which preserve the basic atomic structure. In particular, Coulomb's Law describes a force of attraction between charges of opposite sign. Thus, the electrons and protons are said to mutually attract one another, while pairs of electrons or pairs of protons mutually repel each other<sup>[2](#myfootnote2)</sup>.
 
-Since electrons mutually repel each other, they can only occupy certain orbital locations outside of the nucleus to minimize their mutual repulsive forces (Pauli Exclusion Principle). While electrons close to the nucleus have little surface area to separate from each other, electrons further away have more area to separate amongst themselves. So, electron shells have greater occupancy further from the nucleus. However, we also know that the electrons in these outer shells must be less tightly bound to the nucleus: after all, these electrons can participate in the formation of "chemical bonds" between atoms to form molecules. Such is the basics of chemistry.
+Since electrons mutually repel each other, they can only occupy certain orbital locations outside of the nucleus to minimize their mutual repulsive forces (Pauli Exclusion Principle). While electrons close to the nucleus have little surface area to separate from each other, electrons further away have more area to separate amongst themselves. So, electron shells have greater occupancy further from the nucleus. However, we also know that the electrons in these outer shells must be less tightly bound to the nucleus: after all, these electrons can participate in the formation of "chemical bonds" between atoms to form molecules. Such is the basics of chemistry. For these statements to be true, we should expect that **the Coulomb Force depends not only on the magnitude and sign of the charges, but on the distance between charges, too.**
+
+To encapsulate the effects above, we should desire an expression of the force between charges to depend on the separation distance, sign, and magnitude of the charges. Coulomb's Law satisfies these three necessities and is commonly presented as follows:
+
+$|F_{1\rightarrow2}|$
+
+
+# References
 
 # Footnotes
 <a name="myfootnote1"><sup>[1]</sup></a> Strictly speaking, the quarks that make up the proton neutron posess fractional charge, e.g. an "up" quark has a charge of $\pm2/3q_e$, but quarks have never been observed in isolation (at least not since the Big Bang), while it quite common to see electrons or protons on their own. Thus, on matter of practicality, scientists typically stick to the definition of the elementary charge given above.
