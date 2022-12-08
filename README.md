@@ -25,7 +25,7 @@ Since electrons mutually repel each other, they can only occupy certain orbital 
 
 To encapsulate the effects above, we should desire an expression of the force between charges to depend on the separation distance, sign, and magnitude of the charges. Coulomb's Law satisfies these three necessities and is commonly presented as follows:
 
-$|F_{1\rightarrow2}|$
+$|F_{1\rightarrow2}| = k \frac{|q_1||q_2|}{r^2}$
 
 
 # References
