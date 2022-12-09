@@ -29,7 +29,7 @@ $|\vec{F}_{1\rightarrow2}| = k \frac{|q_1||q_2|}{r^2}$
 
 $|\vec{F}_{1\rightarrow2}|$: Magnitude of force exerted on particle 1 by particle 2 (N)
 
-$k$: Coulomb's Constant,  $8.99\times10^9$ ($N\cdot{}m^2/C^2$)
+$k$: Coulomb's Constant,  $8.99\times10^9$ ( $N\cdot{}m^2/C^2$ )
 
 $|q_1|$: Magnitude of charge contained by particle 1 (C)
 
