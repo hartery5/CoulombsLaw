@@ -24,6 +24,7 @@ let slider3;
 let slider4;
 let slider5;
 let slider6;
+let slider7;
 let checkbox;
 let checkbox2;
 let checkbox3;
@@ -48,9 +49,12 @@ let _ny = 1;
 let ospacing;
 let fwidth;
 let fheight;
+let scaling = 0;
+let oscaling = 0;
 let isolines = [];
 let isoscale = 0.5;
 let isomax = 0.0;
+let isomin = 0.0;
 
 // Flags
 let mover = true;
@@ -73,8 +77,11 @@ function setup() {
   slider2 = createSlider(0, 5, 1, 1);
   slider3 = createSlider(-5, 5, 0, 0.5);
   slider4 = createSlider(1, 5, 1, 0.5);
-  slider5 = createSlider(0.2, 2, 1, 0.2);
-  slider6 = createSlider(0.1, 2, 1, 0.1);
+  slider5 = createSlider(0.6, 2, 1, 0.2);
+  slider5.input(updateTest);
+  slider6 = createSlider(0.2, 1, 1, 0.2);
+  slider7 = createSlider(-2, 0, 0, 0.1);
+  slider7.input(updateZoom);
   
   checkbox = createCheckbox('', true);
   checkbox2 = createCheckbox('', false);
@@ -112,9 +119,6 @@ function setup() {
   // Test Charge
   testCharge = new particle(0, 0, 0.0, 0.0, 1.0, q, spacing/2, false, false);
   
-  // create isolines
-
-  
   oldwidth = width;
   oldheight = height;
   oldradius = radius; 
@@ -131,15 +135,22 @@ function draw() {
   v0 = float(slider2.value())/2.0;
   Bz = slider3.value()/1000.0;
   mass = slider4.value();
-  fac = slider5.value();
+  fac = float(slider5.value());
   isoscale = float(slider6.value());
+  scaling = float(slider7.value());
   
   // Update isolines based on desired density
   isolines = [];
-  for (let i = -1; i<=1; i = i + isoscale){
-     append(isolines,i); 
+  for (let i = -1; i<=log(abs(isomin)); i = i + isoscale){
+     append(isolines,Math.sign(isomin)*exp(i)); 
+  }
+  append(isolines,0.0);
+  for (let i = -2; i<=log(abs(isomax)); i = i + isoscale){
+     append(isolines,Math.sign(isomax)*exp(i)); 
   }
   
+  isomax = 0.0;
+  isomin = 0.0;
   setDimensions();
   
   // Update Checkboxes
@@ -213,7 +224,7 @@ function draw() {
     pop();
   }
   
-  
+  // Clear Screen
   push();
   imageMode(CENTER);
   image(mySvg, width-40, height-40);
@@ -222,6 +233,44 @@ function draw() {
 
   // Text
   updateMenu();
+}
+
+function updateTest(){
+  fac = float(slider5.value());
+  spacing = fac*_spacing;
+  setDimensions();
+  testParticles = [];
+  let I = 0;
+  let J = 0;
+  for (let i = spacing/2; i < width+spacing/2; i += spacing) {
+    testParticles[I] = [];
+    J = 0;
+    for (let j = spacing/2; j < height+spacing/2; j += spacing) {
+      p = new particle(i, j, 0.0, 0.0, 1.0, q, spacing/2, false, true);
+      testParticles[I][J] = p;
+      J += 1;
+    }
+    I += 1;
+  }
+  maxI = I;
+  maxJ = J; 
+}
+
+function updateZoom(){
+  let z = pow(10, float(slider7.value()));
+  let zo = pow(10, oscaling);
+  let xc = width/2;
+  let yc = height/2; 
+
+  for (let i=0; i<particles.length; i++){
+    let r = dist(xc,yc,particles[i].x,particles[i].y);
+    let t = atan2(particles[i].y-yc,particles[i].x-xc);
+    let rn = r*z/zo;
+    particles[i].x = rn*cos(t)+xc;
+    particles[i].y = rn*sin(t)+yc;
+    particles[i].radius = radius + 8*float(slider7.value());
+  }
+  oscaling = float(slider7.value());
 }
 
 function mousePressed() {
@@ -363,8 +412,9 @@ function updateMenu(){
     }
     text("Magnetic Field, B:",20, 8.5*fs);
     text("Mass, m:",20, 9.5*fs);
-    text("Radius, r:",20, 10.5*fs);
+    text("Grid Spacing:",20, 10.5*fs);
     text("Isopotential Spacing:",20, 11.5*fs);
+    text("Zoom:",20, 12.5*fs);
   }
   pop();
 }
@@ -463,6 +513,9 @@ function placeDOM(){
   slider6.position(10, 12*fs);
   let sw6 = nf(11*fs*1.3/2,1,0) + 'px';
   slider6.style("width", sw6);
+  slider7.position(10, 13*fs);
+  let sw7 = nf(11*fs*1.3/2,1,0) + 'px';
+  slider7.style("width", sw7);
   
   checkbox.style("width", "1200px");
   checkbox.style('color', '#ffffff');
@@ -505,14 +558,14 @@ function setBoundaries(){
 }
 
 function setDimensions(){
-  _spacing = sqrt(windowWidth*windowHeight/1000);
+  _spacing = sqrt(windowWidth*windowHeight/2000);
   _aspect = windowWidth/windowHeight;
   spacing = fac*_spacing;
-  radius = fac*_spacing/2;
-  radius = 25;
+  //radius = fac*_spacing;
+  radius = 20;
   fs = 50;
   if (menuOpen){
-    lowerbound = 13*fs;
+    lowerbound = 14*fs;
   } else {
     lowerbound = 2*fs; 
   }
@@ -525,6 +578,7 @@ function hideDOM(){
   slider4.hide();
   slider5.hide();
   slider6.hide();
+  slider7.hide();
   checkbox.hide(); 
   checkbox2.hide(); 
   checkbox3.hide(); 
@@ -539,6 +593,7 @@ function showDOM(){
   slider4.show();
   slider5.show();
   slider6.show();
+  slider7.show();
   checkbox.show(); 
   checkbox2.show(); 
   checkbox3.show(); 
@@ -548,7 +603,7 @@ function showDOM(){
 function checkMenu(){
   if (menuOpen){
     // shrink lowerbound, hide DOM
-    lowerbound = 12*fs;
+    lowerbound = 13*fs;
     boundaries = [];
     setBoundaries();
    
