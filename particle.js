@@ -58,12 +58,18 @@ class particle {
     }
     
     this.V = v;
+    if (this.V>isomax){
+      isomax = this.V;  
+    }
+    if (this.V<isomin){
+      isomin = this.V;
+    }
     this.Emag = pow(sumFx,2) + pow(sumFy,2);
     this.Etheta = atan2(sumFy,sumFx);
 
     if (this.move){
-      ax = (sumFx+this.q*this.vy*Bz)/this.mass;
-      ay = (sumFy-this.q*this.vx*Bz)/this.mass;
+      ax = (sumFx-this.q*this.vy*Bz)/this.mass;
+      ay = (sumFy+this.q*this.vx*Bz)/this.mass;
 
       // Verlet
       vx = this.vx + ax*deltat;
@@ -103,6 +109,7 @@ class particle {
     translate(this.x,this.y);
     // Rotate along axis
     rotate(theta);
+    rotate(180);
     // Move to edge
     translate(Math.sign(F)*this.radius,0);
     line(0, 0, F, 0);
@@ -144,17 +151,18 @@ class particle {
       let c3 = color(180,180,255);
 
       if (showV){
-        v = map(log(abs(this.V)),-3,1,0,1);
+        v = map(log(abs(this.V)),-1,1,0,1);
         if (this.V>0){
           c = lerpColor(c1,c2,v);
         } else {
           c = lerpColor(c1,c3,v); 
         }
-        strokeWeight(0.1);
+        strokeWeight(0.25);
         stroke(c);
         fill(c);
         rectMode(CENTER);
-        rect(0, 0, ospacing*_nx, ospacing*_ny);
+        //rect(0, 0, ospacing*_nx, ospacing*_ny);
+        rect(0, 0, spacing, spacing);
       }
       
       if (!hideArr){
@@ -180,60 +188,73 @@ class particle {
     }
   }
   
-  showiso(){
+ showiso(){
     push();
     translate(this.x,this.y);
-    let spacingx = spacing;
-    let spacingy = spacing;
+    let spacingx = spacing*_nx;
+    let spacingy = spacing*_ny;
+    
+    let ymid = -spacingy/2;
+    let xmid = spacingx/2;
+    
+    let xmb = xmid;
+    let xmt = xmid;
+    let yml = ymid;
+    let ymr = ymid;
+    
+    let left = 0;
+    let right = spacingx;
+    let bottom = 0;
+    let top = -spacingy;
 
     strokeWeight(2);
     stroke(255);
+    fill(0,0,0,0);
     switch(this.linetype){
-      case 0:
-        break;
       case 1:
-        line(0,-spacingy/2,spacingx/2,0);
+        line(left,yml,xmb,bottom);
+        //bezier(left,yml,left,bottom,left,bottom,xmb,bottom);
         break;
       case 2:
-        line(spacingx/2,0,spacingx,-spacingy/2);
+        line(xmb,bottom,right,ymr);
         break;
       case 3:
-        line(0,-spacingy/2,spacingx,-spacingy/2);
+        line(left,yml,right,ymr);
         break;
       case 4:
-        line(spacingx/2,-spacingy,spacingx,-spacingy/2);
+        line(xmt,top,right,ymr);
         break;
       case 5:
-        line(spacingx/2,0,spacingx,-spacingy/2);
-        line(0,-spacingy/2,spacingx/2,-spacingy);
+        line(xmb,bottom,right,ymr);
+        line(left,yml,xmt,top);
         break;
       case 6:
-        line(spacingx/2,0,spacingx/2,-spacingy);
+        line(xmb,bottom,xmt,top);
         break;
       case 7:
-        line(0,-spacingy/2,spacingx/2,-spacingy);
+        line(left,yml,xmt,top);
         break;
       case 8:
-        line(0,-spacingy/2,spacingx/2,-spacingy);
+        line(left,yml,xmt,top);
         break;
       case 9:
-        line(spacingx/2,0,spacingx/2,-spacingy);
+        line(xmb,bottom,xmt,top);
         break;
       case 10:
-        line(0,-spacingy/2,spacingx/2,0);
-        line(spacingx/2,-spacingy,spacingx,-spacingy/2);
+        line(left,yml,xmb,bottom);
+        line(xmt,top,right,ymr);
         break;
       case 11:
-        line(spacingx/2,-spacingy,spacingx,-spacingy/2);
+        line(xmt,top,right,ymr);
         break;
       case 12:
-        line(0,-spacingy/2,spacingx,-spacingy/2);
+        line(left,yml,right,ymr);
         break;
       case 13:
-        line(spacingx/2,0,spacingx,-spacingy/2);
+        line(xmb,bottom,right,ymr);
         break;
       case 14:
-        line(0,-spacingy/2,spacingx/2,0);
+        line(left,yml,xmb,bottom);
         break;
     }
     pop();
