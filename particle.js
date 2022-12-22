@@ -109,7 +109,6 @@ class particle {
     translate(this.x,this.y);
     // Rotate along axis
     rotate(theta);
-    rotate(180);
     // Move to edge
     translate(Math.sign(F)*this.radius,0);
     line(0, 0, F, 0);
