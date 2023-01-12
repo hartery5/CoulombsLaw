@@ -45,7 +45,7 @@ class particle {
           sumFy += Fy;
 
           if (showF && showArr && !this.arrow) {
-            this.showArrow(F, theta);
+            this.showArrow(F, theta, 'comp');
           }
         } else if ((r < this.radius) & (this.move)) {
           this.flag = true;
@@ -56,6 +56,12 @@ class particle {
           return;
         }
       }
+    }
+    
+    if (showF && showArr && !this.arrow) {
+      let netF = pow(pow(sumFx,2) + pow(sumFy,2),0.5);
+      let netT = atan2(sumFy,sumFx);
+      this.showArrow(netF, netT, 'net');
     }
 
     this.V = v;
@@ -100,11 +106,17 @@ class particle {
     }
   }
 
-  showArrow(F, theta) {
+  showArrow(F, theta, type) {
     F *= 10000;
     push();
-    fill(255);
-    stroke(255);
+    if (type=='comp'){
+      fill(196);
+      stroke(196);
+    }
+    else {
+      fill(255);
+      stroke(255);
+    }
     strokeWeight(0.15*this.radius);
     // Move to center
     translate(this.x, this.y);
