@@ -45,7 +45,7 @@ class particle {
           sumFy += Fy;
 
           if (showF && showArr && !this.arrow) {
-            this.showArrow(F, theta, 'comp');
+            this.showArrow(F, theta, particles[i].q);
           }
         } else if ((r < this.radius) & (this.move)) {
           this.flag = true;
@@ -61,7 +61,7 @@ class particle {
     if (showF && showArr && !this.arrow) {
       let netF = pow(pow(sumFx,2) + pow(sumFy,2),0.5);
       let netT = atan2(sumFy,sumFx);
-      this.showArrow(netF, netT, 'net');
+      this.showArrow(netF, netT, 0);
     }
 
     this.V = v;
@@ -106,17 +106,25 @@ class particle {
     }
   }
 
-  showArrow(F, theta, type) {
+  showArrow(F, theta, qq) {
     F *= 10000;
     push();
-    if (type=='comp'){
-      fill(196);
-      stroke(196);
+    let v = map(abs(qq), 1, 10, 0, 1);
+    let cmax;
+    let cmin;
+    if (qq > 0) {
+      cmin = color("salmon");
+      cmax = color(255, 0, 0);
+    } else {
+      cmin = color("cornflowerblue");
+      cmax = color(0, 0, 255);
     }
-    else {
-      fill(255);
-      stroke(255);
+    let c = lerpColor(cmin, cmax, v);
+    if (qq==0) {
+      c = color(255,255,255);
     }
+    //fill(c);
+    stroke(c);
     strokeWeight(0.15*this.radius);
     // Move to center
     translate(this.x, this.y);
