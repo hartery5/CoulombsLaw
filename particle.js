@@ -45,7 +45,7 @@ class particle {
           sumFy += Fy;
 
           if (showF && showArr && !this.arrow) {
-            this.showArrow(F, theta, particles[i].q);
+            this.showArrow(F, theta, particles[i].q, false);
           }
         } else if ((r < this.radius) & (this.move)) {
           this.flag = true;
@@ -61,7 +61,7 @@ class particle {
     if (showF && showArr && !this.arrow) {
       let netF = pow(pow(sumFx,2) + pow(sumFy,2),0.5);
       let netT = atan2(sumFy,sumFx);
-      this.showArrow(netF, netT, 0);
+      this.showArrow(netF, netT, 0, false);
     }
 
     this.V = v;
@@ -106,7 +106,7 @@ class particle {
     }
   }
 
-  showArrow(F, theta, qq) {
+  showArrow(F, theta, qq, field) {
     F *= 10000;
     push();
     let v = map(abs(qq), 1, 10, 0, 1);
@@ -129,7 +129,11 @@ class particle {
     // Move to center
     translate(this.x, this.y);
     // Rotate along axis
-    rotate(theta);
+    if (field){
+      rotate(theta+PI);
+    } else {
+      rotate(theta);
+    }
     // Move to edge
     translate(Math.sign(F)*this.radius, 0);
     line(0, 0, F, 0);

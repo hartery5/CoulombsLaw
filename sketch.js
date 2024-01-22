@@ -497,26 +497,21 @@ function updateCheckboxes() {
 
 function placeDOM() {
   slider.position(10, 0.75*fs);
-  let sw = nf(11*fs*1.3/2, 1, 0) + 'px';
-  slider.style("width", sw);
+  let sw = 11*fs*1.3/2;
+  slider.size(sw);
   slider2.position(90+fs, 3*fs);
-  let sw2 = nf(fs*3, 1, 0) + 'px';
-  slider2.style('width', sw2);
+  let sw2 = fs*3;
+  slider2.size(sw2);
   slider3.position(10, 9*fs);
-  let sw3 = nf(11*fs*1.3/2, 1, 0) + 'px';
-  slider3.style("width", sw3);
+  slider3.size(sw);
   slider4.position(10, 10*fs);
-  let sw4 = nf(11*fs*1.3/2, 1, 0) + 'px';
-  slider4.style("width", sw4);
+  slider4.size(sw);
   slider5.position(10, 11*fs);
-  let sw5 = nf(11*fs*1.3/2, 1, 0) + 'px';
-  slider5.style("width", sw5);
+  slider5.size(sw);
   slider6.position(10, 12*fs);
-  let sw6 = nf(11*fs*1.3/2, 1, 0) + 'px';
-  slider6.style("width", sw6);
+  slider6.size(sw);
   slider7.position(10, 13*fs);
-  let sw7 = nf(11*fs*1.3/2, 1, 0) + 'px';
-  slider7.style("width", sw7);
+  slider7.size(sw);
 
   checkbox.style("width", "1200px");
   checkbox.style('color', '#ffffff');
