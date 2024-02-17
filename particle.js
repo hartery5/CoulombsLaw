@@ -34,8 +34,8 @@ class particle {
         F = Coulomb(this, particles[i]);
         theta = calculateTheta(this, particles[i]);
         r = dist(this.x, this.y, particles[i].x, particles[i].y);
-        if (r<1e-8){
-          r = 1e-8;  
+        if (r<20){
+          r = 20;  
         }
         v += k*particles[i].q/r;
         if (r>this.radius) {
@@ -87,9 +87,10 @@ class particle {
 
       for (let j = 0; j < boundaries.length; j +=1) {
         if (boundaries[j].bounce(x, y, this.radius)) {
-          let dotproduct = vx*boundaries[j].nx + vy*boundaries[j].ny;
-          vx += - 2.0*dotproduct*boundaries[j].nx;
-          vy += - 2.0*dotproduct*boundaries[j].ny;
+          //let dotproduct = vx*boundaries[j].nx + vy*boundaries[j].ny;
+          //vx += - 2.0*dotproduct*boundaries[j].nx;
+          //vy += - 2.0*dotproduct*boundaries[j].ny;
+          this.flag = true;
         }
       }
 
@@ -104,6 +105,10 @@ class particle {
       this.y = y;
       this.t += 1;
     }
+  }
+
+  getVoltage(){
+    return this.V;
   }
 
   showArrow(F, theta, qq, field) {
@@ -171,8 +176,8 @@ class particle {
 
       let c, v;
       let c1 = color(0, 0, 0);
-      let c2 = color(180, 255, 180, 255);
-      let c3 = color(180, 180, 255);
+      let c2 = color(239,138,98);
+      let c3 = color(103,169,207);
 
       if (showV) {
         v = map(log(abs(this.V)), -1, 1, 0, 1);
@@ -190,8 +195,9 @@ class particle {
       }
 
       if (!showV) {
-        c1 = color(80, 80, 80, 255);
-        v = map(log(abs(this.Emag)), -15, -6, 0, 1);
+        c1 = color(80, 80, 80, 0);
+        c2 = color(255, 255, 255);
+        v = map(log(abs(this.Emag)), -18, -6, 0, 1);
         c = lerpColor(c1, c2, v);
         stroke(c);
         strokeWeight(2);
@@ -212,7 +218,7 @@ class particle {
     }
   }
 
-  showiso() {
+  showiso(Pxb,Pyr,Pxt,Pyl,VV) {
     push();
     translate(this.x, this.y);
     let spacingx = fac*radius;
@@ -221,10 +227,11 @@ class particle {
     let ymid = -spacingy/2;
     let xmid = spacingx/2;
 
-    let xmb = xmid;
-    let xmt = xmid;
-    let yml = ymid;
-    let ymr = ymid;
+
+    let xmb = spacingx*Pxb;
+    let xmt = spacingx*Pxt;
+    let yml = -spacingy*Pyl;
+    let ymr = -spacingy*Pyr;
 
     let left = 0;
     let right = spacingx;
@@ -232,7 +239,25 @@ class particle {
     let top = -spacingy;
 
     strokeWeight(2);
-    stroke(255);
+
+
+    let cmax;
+    let cmin;
+    let v;
+    if (VV > 0) {
+      cmin = color("salmon");
+      cmax = color(255, 0, 0);
+      v = map(VV,0,isomax,0,1);
+    } else {
+      cmin = color("cornflowerblue");
+      cmax = color(0, 0, 255);
+      v = map(VV,isomin,0,0,1)
+    }
+    let c = lerpColor(cmin, cmax, v);
+    if (VV ==0.0){
+      c = color(255,255,255);
+    }
+    stroke(c);
     fill(0, 0, 0, 0);
     switch(this.linetype) {
     case 1:
