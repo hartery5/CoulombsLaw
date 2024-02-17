@@ -139,31 +139,29 @@ function draw() {
   isoscale = float(slider6.value());
   scaling = float(slider7.value());
 
-  // Update isolines based on desired density
-  isolines = [];
-  for (let i = -1; i<=log(abs(isomin)); i = i + isoscale) {
-    append(isolines, Math.sign(isomin)*exp(i));
-  }
-  append(isolines, 0.0);
-  for (let i = -2; i<=log(abs(isomax)); i = i + isoscale) {
-    append(isolines, Math.sign(isomax)*exp(i));
-  }
-
-  isomax = 0.0;
-  isomin = 0.0;
-  //setDimensions();
-
   // Update Checkboxes
   updateCheckboxes();
 
   // Show E field
   if (showE) {
+    isomax = 0.0;
+    isomin = 0.0;
     for (let i=0; i < maxI; i+=1) {
       for (let j=0; j < maxJ; j+=1) {
         testParticles[i][j].physics(particles, boundaries, deltat);
         testParticles[i][j].draw();
       }
     }
+
+    isolines = [];
+    for (let i = -1; i<=log(abs(isomin)); i = i + isoscale) {
+      append(isolines, Math.sign(isomin)*exp(i));
+    }
+    append(isolines, 0.0);
+    for (let i = -1; i<=log(abs(isomax)); i = i + isoscale) {
+      append(isolines, Math.sign(isomax)*exp(i));
+    }
+
     if (showV) {
       for (let k=isolines.length; k>=0; k--) {
         //Marching squares
@@ -173,14 +171,17 @@ function draw() {
             testParticles[i][j].flip(isolines[k]);
           }
         }
-
         // Step 2 "March"
         // Each 2x2 cell is assigned ID from 0-15 based on bits
         // Line is drawn based on look-up-table
         for (let i = 0; i<maxI-1; i++) {
           for (let j = 1; j<maxJ; j++) {
+            let Pyr = 1 - (isolines[k] - testParticles[i+1][j-1].V)/(testParticles[i+1][j].V-testParticles[i+1][j-1].V);
+            let Pxt = (isolines[k] - testParticles[i][j-1].V)/(testParticles[i+1][j-1].V-testParticles[i][j-1].V);
+            let Pyl = 1 - (isolines[k] - testParticles[i][j-1].V)/(testParticles[i][j].V-testParticles[i][j-1].V);
+            let Pxb = (isolines[k] - testParticles[i][j].V)/(testParticles[i+1][j].V-testParticles[i][j].V);
             testParticles[i][j].linetype = testParticles[i][j].bit + 2*testParticles[i+1][j].bit + 4*testParticles[i+1][j-1].bit + 8*testParticles[i][j-1].bit; // clumsy but correct
-            testParticles[i][j].showiso();
+            testParticles[i][j].showiso(Pxb,Pyr,Pxt,Pyl,isolines[k]);
           }
         }
       }
