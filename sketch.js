@@ -1,5 +1,6 @@
 // Object Arrays
 let particles = [];
+let lastParticles;
 let testParticles = [];
 let maxI, maxJ;
 let boundaries = [];
@@ -31,6 +32,8 @@ let checkbox3;
 let checkbox4;
 let checkbox5;
 let checkbox6;
+let checkbox7;
+let checkbox8;
 
 // Various display dimensions
 let oldwidth;
@@ -65,6 +68,7 @@ let showF = false;
 let showArr = true;
 let showTest = false;
 let fillShape = true;
+let showLines = false;
 
 function setup() {
   mySvg = loadImage("wastebasket.svg");
@@ -91,6 +95,8 @@ function setup() {
   checkbox5 = createCheckbox('', false);
   checkbox6 = createCheckbox('', false);
   checkbox7 = createCheckbox('', false);
+  checkbox8 = createCheckbox('', false);
+  
 
   checkbox6.changed(() => {
     if (checkbox6.checked()){
@@ -173,6 +179,120 @@ function draw() {
         testParticles[i][j].draw();
       }
     }
+
+    if (showLines){
+    let nQ = 0
+    for (let i = 0; i<particles.length; i++){
+      nQ += particles[i].q
+    }
+
+    if (nQ==0.0){
+      print("neutral")
+      nQ = 1;
+    }
+
+    startpoints = []
+    integration_dir = []
+    for (let i = 0; i<particles.length; i++){
+        //if (particles[i].q*nQ<0){
+        //  //print("opp")
+        //  continue
+        //}
+        let N = abs(8*particles[i].q);
+        for (let j=0; j<N;j+=1){
+            let th = 2*PI*j/N;
+            let spx = 2*radius*cos(th)+particles[i].x;
+            let spy = 2*radius*sin(th)+particles[i].y;
+            let intdir = 2*(particles[i].q>0)-1
+            startpoints.push([spx,spy])
+            integration_dir.push(intdir)
+        }
+    }
+  
+    push();
+    strokeWeight(2);
+    stroke(255,255,255);
+    noFill();
+    let nHalts = 0;
+    for (let i=0; i<startpoints.length; i++){
+        let px = startpoints[i][0];
+        let py = startpoints[i][1];
+        let halt = false;
+        let intstep = 0;
+        let f = 0.05;
+        let pathLength = 0;
+        let arrSpacing = 200;
+        while ((!halt) && (intstep<100000)){
+          let ptraj = new particle(px,py,0,0,1,1,1,false,false);
+          for (let j=0; j<particles.length;j++){
+            let r = dist(ptraj.x, ptraj.y, particles[j].x, particles[j].y);
+            if (r < 2*particles[j].radius) {
+              halt = true;
+              break
+            }
+          }
+
+          for (let j = 0; j < boundaries.length; j +=1) {
+            if (boundaries[j].bounce(ptraj.x, ptraj.y, radius)) {
+              halt = true
+              break
+            }
+          }
+
+          if (halt){
+            nHalts +=1;
+            break
+          }
+
+          ptraj.physics(particles,boundaries,deltat);
+          let nvx = f*integration_dir[i]*ptraj.Ex;
+          let nvy = f*integration_dir[i]*ptraj.Ey;
+          let r = sqrt(pow(nvx,2)+pow(nvy,2));
+          if (r<0.01){
+            f *= 10;
+          }
+          if (r>0.1){
+            f /= 10;
+          }
+
+          nvx = f*integration_dir[i]*ptraj.Ex;
+          nvy = f*integration_dir[i]*ptraj.Ey;
+          let nx = px + nvx;
+          let ny = py + nvy;
+
+          r = sqrt(pow(nvx,2)+pow(nvy,2));
+          pathLength += r;
+          line(px,py,nx,ny);
+
+          if ((Math.floor(pathLength) % arrSpacing)==(arrSpacing-1)){
+              fill(255);
+              let theta = atan2(nvy,nvx);
+              translate(nx,ny);
+              // Rotate along axis
+              if (integration_dir[i]>0){
+                rotate(theta);
+              } else {
+                rotate(theta+PI);
+              }
+              // Move to edge
+              triangle(0, 4, +8, 0, 0, -4);
+              if (integration_dir[i]>0){
+                rotate(-1*theta);
+              } else {
+                rotate(-1*(theta+PI));
+              }
+              translate(-nx,-ny);
+          }
+          noFill();
+
+          px = nx;
+          py = ny;
+          intstep +=1;
+        }
+      }
+      //print(nHalts);
+      pop();
+    }
   }
   if (showE && showV){
     isomax = 0.0;
@@ -244,6 +364,120 @@ function draw() {
         testParticles[i][j].draw();
       }
     }
+
+    if (showLines){
+      let nQ = 0
+      for (let i = 0; i<particles.length; i++){
+        nQ += particles[i].q
+      }
+  
+      if (nQ==0.0){
+        print("neutral")
+        nQ = 1;
+      }
+  
+      startpoints = []
+      integration_dir = []
+      for (let i = 0; i<particles.length; i++){
+          //if (particles[i].q*nQ<0){
+          //  //print("opp")
+          //  continue
+          //}
+          let N = abs(8*particles[i].q);
+          for (let j=0; j<N;j+=1){
+              let th = 2*PI*j/N;
+              let spx = 2*radius*cos(th)+particles[i].x;
+              let spy = 2*radius*sin(th)+particles[i].y;
+              let intdir = 2*(particles[i].q>0)-1
+              startpoints.push([spx,spy])
+              integration_dir.push(intdir)
+          }
+      }
+    
+      push();
+      strokeWeight(2);
+      stroke(0,0,0);
+      noFill();
+      let nHalts = 0;
+      for (let i=0; i<startpoints.length; i++){
+          let px = startpoints[i][0];
+          let py = startpoints[i][1];
+          let halt = false;
+          let intstep = 0;
+          let f = 0.05;
+          let pathLength = 0;
+          let arrSpacing = 200;
+          while ((!halt) && (intstep<100000)){
+            let ptraj = new particle(px,py,0,0,1,1,1,false,false);
+            for (let j=0; j<particles.length;j++){
+              let r = dist(ptraj.x, ptraj.y, particles[j].x, particles[j].y);
+              if (r < 2*particles[j].radius) {
+                halt = true;
+                break
+              }
+            }
+  
+            for (let j = 0; j < boundaries.length; j +=1) {
+              if (boundaries[j].bounce(ptraj.x, ptraj.y, radius)) {
+                halt = true
+                break
+              }
+            }
+  
+            if (halt){
+              nHalts +=1;
+              break
+            }
+  
+            ptraj.physics(particles,boundaries,deltat);
+            let nvx = f*integration_dir[i]*ptraj.Ex;
+            let nvy = f*integration_dir[i]*ptraj.Ey;
+            let r = sqrt(pow(nvx,2)+pow(nvy,2));
+            if (r<0.01){
+              f *= 10;
+            }
+            if (r>0.1){
+              f /= 10;
+            }
+  
+            nvx = f*integration_dir[i]*ptraj.Ex;
+            nvy = f*integration_dir[i]*ptraj.Ey;
+            let nx = px + nvx;
+            let ny = py + nvy;
+  
+            r = sqrt(pow(nvx,2)+pow(nvy,2));
+            pathLength += r;
+            line(px,py,nx,ny);
+  
+            if ((Math.floor(pathLength) % arrSpacing)==(arrSpacing-1)){
+                fill(0);
+                let theta = atan2(nvy,nvx);
+                translate(nx,ny);
+                // Rotate along axis
+                if (integration_dir[i]>0){
+                  rotate(theta);
+                } else {
+                  rotate(theta+PI);
+                }
+                // Move to edge
+                triangle(0, 4, +8, 0, 0, -4);
+                if (integration_dir[i]>0){
+                  rotate(-1*theta);
+                } else {
+                  rotate(-1*(theta+PI));
+                }
+                translate(-nx,-ny);
+            }
+            noFill();
+  
+            px = nx;
+            py = ny;
+            intstep +=1;
+          }
+        }
+        //print(nHalts);
+        pop();
+      }
   }
 
   // Show B-Field
@@ -454,6 +688,7 @@ function updateMenu() {
   if (showE) {
     text("Show V", 4*fs*1.3/2+20, 6.5*fs);
     text("Hide →", 8*fs*1.3/2+20, 6.5*fs);
+    text("Show Lines", 7*fs*1.3/2+20, 5.5*fs);
   }
   text("Show F", 20, 7.5*fs);
   if (showF) {
@@ -526,6 +761,7 @@ function updateCheckboxes() {
   if (showE) {
     checkbox6.show();
     checkbox7.show();
+    checkbox8.show();
     if (checkbox6.checked()) {
       showV = true;
     } else {
@@ -536,9 +772,15 @@ function updateCheckboxes() {
     } else {
       showArr = true;
     }
+    if (checkbox8.checked()){
+      showLines = true;
+    } else {
+      showLines = false;
+    }
   } else {
     checkbox6.hide();
     checkbox7.hide();
+    checkbox8.hide();
   }
 }
 
@@ -580,6 +822,9 @@ function placeDOM() {
   checkbox6.position(4*fs*1.3/2, 6.5*fs);
   checkbox7.style('color', '#ffffff');
   checkbox7.position(8*fs*1.3/2, 6.5*fs);
+  checkbox8.style('color','#ffffff');
+  checkbox8.position(7*fs*1.3/2, 5.5*fs);
+
 }
 
 function setBoundaries() {

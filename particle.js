@@ -13,6 +13,9 @@ class particle {
     this.ay = 0.0;
     this.V = 0;
     this.t = 0;
+    this.Ex;
+    this.Ey;
+    this.Emag = 0.0;
     this.Etheta = 0.0;
     this.flag = false;
     this.radius = r;
@@ -34,8 +37,8 @@ class particle {
         F = Coulomb(this, particles[i]);
         theta = calculateTheta(this, particles[i]);
         r = dist(this.x, this.y, particles[i].x, particles[i].y);
-        if (r<20){
-          r = 20;  
+        if (r < 5){
+          r = 5;  
         }
         v += k*particles[i].q/r;
         if (r>this.radius) {
@@ -71,7 +74,9 @@ class particle {
     if (this.V<isomin) {
       isomin = this.V;
     }
-    this.Emag = pow(sumFx, 2) + pow(sumFy, 2);
+    this.Ex = sumFx;
+    this.Ey = sumFy;
+    this.Emag = sqrt(pow(sumFx, 2) + pow(sumFy, 2));
     this.Etheta = atan2(sumFy, sumFx);
 
     if (this.move) {
@@ -81,6 +86,9 @@ class particle {
       // Verlet
       vx = this.vx + ax*deltat;
       vy = this.vy + ay*deltat;
+
+      vx = ax*deltat;
+      vy = ay*deltat;
 
       x = this.x + vx*deltat;
       y = this.y + vy*deltat;
@@ -94,8 +102,8 @@ class particle {
         }
       }
 
-      x = this.x + vx*deltat;
-      y = this.y + vy*deltat;
+      //x = this.x + vx*deltat;
+      //y = this.y + vy*deltat;
 
       this.ax = ax;
       this.ay = ay;
