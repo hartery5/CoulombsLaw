@@ -155,15 +155,18 @@ class particle {
       let cmax;
       let cmin;
       if (this.q > 0) {
-        cmin = color("salmon");
-        cmax = color(255, 0, 0);
+        cmax = color("salmon");
+        cmin = color(255, 0, 0);
       } else {
-        cmin = color("cornflowerblue");
-        cmax = color(0, 0, 255);
+        cmax = color("cornflowerblue");
+        cmin = color(0, 0, 255);
       }
       let c = lerpColor(cmin, cmax, v);
       fill(c);
+      stroke(0);
+      strokeWeight(2);
       circle(0, 0, this.radius*2);
+      noStroke();
       textSize(this.radius);
       textFont('Courier New');
       textAlign(CENTER, CENTER);
@@ -179,22 +182,22 @@ class particle {
       let c2 = color(239,138,98);
       let c3 = color(103,169,207);
 
-      if (showV) {
-        v = map(log(abs(this.V)), -1, 1, 0, 1);
-        if (this.V>0) {
-          c = lerpColor(c1, c2, v);
-        } else {
-          c = lerpColor(c1, c3, v);
-        }
-        strokeWeight(0.25);
-        stroke(c);
-        fill(c);
-        rectMode(CENTER);
-        //rect(0, 0, ospacing*_nx, ospacing*_ny);
-        rect(0, 0, fac*radius, fac*radius);
-      }
+      //if (showV) {
+      //  v = map(log(abs(this.V)), -1, 1, 0, 1);
+      //  if (this.V>0) {
+      //    c = lerpColor(c1, c2, v);
+      //  } else {
+      //    c = lerpColor(c1, c3, v);
+      //  }
+      //  strokeWeight(0.25);
+      //  stroke(c);
+      //  fill(c);
+      //  rectMode(CENTER);
+      //  //rect(0, 0, ospacing*_nx, ospacing*_ny);
+      //  rect(0,0, fac*radius, fac*radius);
+      // }
 
-      if (!showV) {
+      if (showArr && !showV) {
         c1 = color(80, 80, 80, 0);
         c2 = color(255, 255, 255);
         v = map(log(abs(this.Emag)), -18, -6, 0, 1);
@@ -203,8 +206,22 @@ class particle {
         strokeWeight(2);
         fill(c);
         rotate(this.Etheta);
-        line(0, 0, 0.9*this.radius, 0);
-        triangle(0.9*this.radius, 0.1*this.radius, 0.9*this.radius+0.1*this.radius, 0, 0.9*this.radius, -0.1*this.radius);
+        let s = this.radius/fac;
+        line(0, 0, 0.9*s, 0);
+        triangle(0.9*s, 0.1*s, 0.9*s+0.1*s, 0, 0.9*s, -0.1*s);
+      }
+      if (showArr && showV) {
+        c1 = color(255,255, 255, 0);
+        c2 = color(0, 0, 0, 255);
+        v = map(log(abs(this.Emag)), -18, -6, 0, 1);
+        c = lerpColor(c1, c2, v);
+        stroke(c);
+        strokeWeight(2);
+        fill(c);
+        rotate(this.Etheta);
+        let s = this.radius/fac;
+        line(0, 0, 0.9*s, 0);
+        triangle(0.9*s, 0.1*s, 0.9*s+0.1*s, 0, 0.9*s, -0.1*s);
       }
       pop();
     }
@@ -218,95 +235,230 @@ class particle {
     }
   }
 
-  showiso(Pxb,Pyr,Pxt,Pyl,VV) {
+  showiso(Pxb,Pyr,Pxt,Pyl,VV,isomin,isomax) {
     push();
     translate(this.x, this.y);
     let spacingx = fac*radius;
     let spacingy = fac*radius;
 
-    let ymid = -spacingy/2;
-    let xmid = spacingx/2;
-
-
-    let xmb = spacingx*Pxb;
-    let xmt = spacingx*Pxt;
-    let yml = -spacingy*Pyl;
-    let ymr = -spacingy*Pyr;
+    let xmb = Pxb*spacingx;
+    let xmt = Pxt*spacingx;
+    let yml = -Pyl*spacingy;
+    let ymr = -Pyr*spacingy;
 
     let left = 0;
     let right = spacingx;
     let bottom = 0;
     let top = -spacingy;
 
-    strokeWeight(2);
-
-
     let cmax;
     let cmin;
-    let v;
+    let v, c;
     if (VV > 0) {
-      cmin = color("salmon");
+      cmin = color(255,155,155);
       cmax = color(255, 0, 0);
       v = map(VV,0,isomax,0,1);
-    } else {
+      c = lerpColor(cmin, cmax, v);
+    } else if (VV < 0) {
       cmin = color("cornflowerblue");
       cmax = color(0, 0, 255);
-      v = map(VV,isomin,0,0,1)
-    }
-    let c = lerpColor(cmin, cmax, v);
-    if (VV ==0.0){
+      v = map(VV,isomin,0,0,1);
+      c = lerpColor(cmin, cmax, v);
+    } else {
       c = color(255,255,255);
     }
+
+    strokeWeight(3);
     stroke(c);
-    fill(0, 0, 0, 0);
+    noFill();
     switch(this.linetype) {
-    case 1:
-      line(left, yml, xmb, bottom);
-      //bezier(left,yml,left,bottom,left,bottom,xmb,bottom);
-      break;
-    case 2:
-      line(xmb, bottom, right, ymr);
-      break;
-    case 3:
-      line(left, yml, right, ymr);
-      break;
-    case 4:
-      line(xmt, top, right, ymr);
-      break;
-    case 5:
-      line(xmb, bottom, right, ymr);
-      line(left, yml, xmt, top);
-      break;
-    case 6:
-      line(xmb, bottom, xmt, top);
-      break;
-    case 7:
-      line(left, yml, xmt, top);
-      break;
-    case 8:
-      line(left, yml, xmt, top);
-      break;
-    case 9:
-      line(xmb, bottom, xmt, top);
-      break;
-    case 10:
-      line(left, yml, xmb, bottom);
-      line(xmt, top, right, ymr);
-      break;
-    case 11:
-      line(xmt, top, right, ymr);
-      break;
-    case 12:
-      line(left, yml, right, ymr);
-      break;
-    case 13:
-      line(xmb, bottom, right, ymr);
-      break;
-    case 14:
-      line(left, yml, xmb, bottom);
-      break;
-    }
+      case 1:
+        line(left, yml, xmb, bottom);
+        break;
+      case 2:
+        line(xmb, bottom, right, ymr);
+        break;
+      case 3:
+        line(left, yml, right, ymr);
+        break;
+      case 4:
+        line(xmt, top, right, ymr);
+        break;
+      case 5:
+        line(xmb, bottom, right, ymr);
+        line(left, yml, xmt, top);
+        break;
+      case 6:
+        line(xmb, bottom, xmt, top);
+        break;
+      case 7:
+        line(left, yml, xmt, top);
+        break;
+      case 8:
+        line(left, yml, xmt, top);
+        break;
+      case 9:
+        line(xmb, bottom, xmt, top);
+        break;
+      case 10:
+        line(left, yml, xmb, bottom);
+        line(xmt, top, right, ymr);
+        break;
+      case 11:
+        line(xmt, top, right, ymr);
+        break;
+      case 12:
+        line(left, yml, right, ymr);
+        break;
+      case 13:
+        line(xmb, bottom, right, ymr);
+        break;
+      case 14:
+        line(left, yml, xmb, bottom);
+        break;
+      }
+    
     pop();
+  }
+
+  filliso(Pxb,Pyr,Pxt,Pyl,VV,isomin,isomax){
+    push();
+    translate(this.x,this.y);
+    let cmax;
+    let cmin;
+    let v, c;
+    if (VV > 0) {
+      cmin = color(255,155,155);
+      cmax = color(255, 0, 0);
+      v = map(VV,0,isomax,0,1);
+      c = lerpColor(cmin, cmax, v);
+    } else if (VV < 0) {
+      cmin = color("cornflowerblue");
+      cmax = color(0, 0, 255);
+      v = map(VV,isomin,0,0,1);
+      c = lerpColor(cmax, cmin, v);
+    } else {
+      c = (255,255,255);
+    }
+
+    let spacingx = fac*radius;
+    let spacingy = fac*radius;
+
+    let xmb = Pxb*spacingx;
+    let xmt = Pxt*spacingx;
+    let yml = -Pyl*spacingy;
+    let ymr = -Pyr*spacingy;
+
+    let left = 0;
+    let right = spacingx;
+    let bottom = 0;
+    let top = -spacingy;
+
+    fill(c);
+    noStroke();
+    beginShape(TESS);
+    
+    switch(this.linetype){
+      case 0:
+        break;
+      case 1:
+        vertex(left,bottom);
+        vertex(left,yml);
+        vertex(xmb,bottom);
+        break;
+      case 2:
+        vertex(xmb,bottom);
+        vertex(right,bottom);
+        vertex(right,ymr);
+        break;
+      case 3:
+        vertex(0,0);
+        vertex(0,yml);
+        vertex(right,ymr);
+        vertex(right,0);
+        break;
+      case 4:
+        vertex(xmt,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,ymr);
+        break;
+      case 5:
+        vertex(0,0);
+        vertex(0,yml);
+        vertex(xmt,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,ymr);
+        vertex(xmb,0);
+        break;
+      case 6:
+        vertex(xmb,0);
+        vertex(xmt,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,0);
+        break;
+      case 7:
+        vertex(0,0);
+        vertex(0,yml);
+        vertex(xmt,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,0);
+        break;
+      case 8:
+        vertex(0,yml);
+        vertex(0,-spacingy);
+        vertex(xmt,-spacingy);
+        break;
+      case 9:
+        vertex(0,0);
+        vertex(0,-spacingy);
+        vertex(xmt,-spacingy);
+        vertex(xmb,0);
+        break;
+      case 10:
+        vertex(0,yml);
+        vertex(0,-spacingy);
+        vertex(xmt,-spacingy);
+        vertex(spacingx,ymr);
+        vertex(spacingx,0);
+        vertex(xmb,0);
+        break;
+      case 11:
+        vertex(0,0);
+        vertex(0,-spacingy);
+        vertex(xmt,-spacingy);
+        vertex(spacingx,ymr);
+        vertex(spacingx,0);
+        break;
+      case 12:
+        vertex(0,yml);
+        vertex(0,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,ymr);
+        break;
+      case 13:
+        vertex(0,0);
+        vertex(0,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,ymr);
+        vertex(xmb,0);
+        break;
+      case 14:
+        vertex(0,yml);
+        vertex(0,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,0);
+        vertex(xmb,0);
+        break;
+      case 15:
+        vertex(0,0);
+        vertex(0,-spacingy);
+        vertex(spacingx,-spacingy);
+        vertex(spacingx,0);
+    }
+    endShape();
+    
+    pop();
+    //this.draw();
   }
 }
 

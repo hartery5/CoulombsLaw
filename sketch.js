@@ -64,6 +64,7 @@ let showV = false;
 let showF = false;
 let showArr = true;
 let showTest = false;
+let fillShape = true;
 
 function setup() {
   mySvg = loadImage("wastebasket.svg");
@@ -91,6 +92,13 @@ function setup() {
   checkbox6 = createCheckbox('', false);
   checkbox7 = createCheckbox('', false);
 
+  checkbox6.changed(() => {
+    if (checkbox6.checked()){
+      showArr=false;
+      checkbox7.checked(true);
+    }
+  });
+
   // Place UI elements
   placeDOM();
 
@@ -100,11 +108,11 @@ function setup() {
   // Create Field Arrows
   let I = 0;
   let J = 0;
-  for (let i = 400; i < width+fac*radius; i += fac*radius) {
+  for (let i = 400; i < width+2*fac*radius; i += fac*radius) {
     testParticles[I] = [];
     J = 0;
-    for (let j = fac*radius; j < height+fac*radius; j += fac*radius) {
-      p = new particle(i+0.1, j+0.1, 0.0, 0.0, 1.0, q, spacing/2, false, true);
+    for (let j = 0; j < height+fac*radius; j += fac*radius) {
+      p = new particle(i, j, 0.0, 0.0, 1.0, q, spacing/2, false, true);
       testParticles[I][J] = p;
       J += 1;
     }
@@ -142,52 +150,6 @@ function draw() {
   // Update Checkboxes
   updateCheckboxes();
 
-  // Show E field
-  if (showE) {
-    isomax = 0.0;
-    isomin = 0.0;
-    for (let i=0; i < maxI; i+=1) {
-      for (let j=0; j < maxJ; j+=1) {
-        testParticles[i][j].physics(particles, boundaries, deltat);
-        testParticles[i][j].draw();
-      }
-    }
-
-    isolines = [];
-    for (let i = -1; i<=log(abs(isomin)); i = i + isoscale) {
-      append(isolines, Math.sign(isomin)*exp(i));
-    }
-    append(isolines, 0.0);
-    for (let i = -1; i<=log(abs(isomax)); i = i + isoscale) {
-      append(isolines, Math.sign(isomax)*exp(i));
-    }
-
-    if (showV) {
-      for (let k=isolines.length; k>=0; k--) {
-        //Marching squares
-        // Step 1 flip the bits (1: V>=iso[k]; 0: V<iso[k])
-        for (let i =0; i<maxI; i++) {
-          for (let j=0; j<maxJ; j++) {
-            testParticles[i][j].flip(isolines[k]);
-          }
-        }
-        // Step 2 "March"
-        // Each 2x2 cell is assigned ID from 0-15 based on bits
-        // Line is drawn based on look-up-table
-        for (let i = 0; i<maxI-1; i++) {
-          for (let j = 1; j<maxJ; j++) {
-            let Pyr = 1 - (isolines[k] - testParticles[i+1][j-1].V)/(testParticles[i+1][j].V-testParticles[i+1][j-1].V);
-            let Pxt = (isolines[k] - testParticles[i][j-1].V)/(testParticles[i+1][j-1].V-testParticles[i][j-1].V);
-            let Pyl = 1 - (isolines[k] - testParticles[i][j-1].V)/(testParticles[i][j].V-testParticles[i][j-1].V);
-            let Pxb = (isolines[k] - testParticles[i][j].V)/(testParticles[i+1][j].V-testParticles[i][j].V);
-            testParticles[i][j].linetype = testParticles[i][j].bit + 2*testParticles[i+1][j].bit + 4*testParticles[i+1][j-1].bit + 8*testParticles[i][j-1].bit; // clumsy but correct
-            testParticles[i][j].showiso(Pxb,Pyr,Pxt,Pyl,isolines[k]);
-          }
-        }
-      }
-    }
-  }
-
   // Show Cartesian Grid
   push();
   setLineDash([radius/4, radius/4]);
@@ -199,6 +161,90 @@ function draw() {
     line(0, j, width, j);
   }
   pop();
+
+
+  // Show E field
+  if (showE && !showV) {
+    isomax = 0.0;
+    isomin = 0.0;
+    for (let i=0; i < maxI; i+=1) {
+      for (let j=0; j < maxJ; j+=1) {
+        testParticles[i][j].physics(particles, boundaries, deltat);
+        testParticles[i][j].draw();
+      }
+    }
+  }
+  if (showE && showV){
+    isomax = 0.0;
+    isomin = 0.0;
+    for (let i=0; i < maxI; i+=1) {
+      for (let j=0; j < maxJ; j+=1) {
+        testParticles[i][j].physics(particles, boundaries, deltat);
+        //testParticles[i][j].draw();
+      }
+    }
+    //print(isomin,isomax);
+    isolines = [];
+    isomin = Math.floor(-4);
+    //isomax = 4;
+    isoscale = 0.5;
+    //for (let i = log(abs(isomin)); i>=-1; i = i - isoscale) {
+    //  append(isolines, Math.sign(isomin)*exp(i));
+    //}
+    //append(isolines, 0.0);
+    //for (let i = -1; i<=log(abs(isomax)); i = i + isoscale) {
+    //  append(isolines, Math.sign(isomax)*exp(i));
+    //}
+
+    for (let i = isomin; i<=isomax; i += isoscale) {
+      append(isolines, i);
+    }
+
+    for (let k=0; k<isolines.length; k++) {
+      //Marching squares
+      // Step 1 flip the bits (1: V>=iso[k]; 0: V<iso[k])
+      showV = false
+      for (let i =0; i<maxI; i++) {
+        for (let j=0; j<maxJ; j++) {
+          testParticles[i][j].flip(isolines[k]);
+          //testParticles[i][j].draw();
+        }
+      }
+      showV=true
+      // Step 2 "March"
+      // Each 2x2 cell is assigned ID from 0-15 based on bits
+      // Line is drawn based on look-up-table
+      for (let i = 0; i<maxI-1; i++) {
+        for (let j = 1; j<maxJ; j++) {
+          let Pyr = 1 - (isolines[k] - testParticles[i+1][j-1].V)/(testParticles[i+1][j].V-testParticles[i+1][j-1].V);
+          let Pxt = (isolines[k] - testParticles[i][j-1].V)/(testParticles[i+1][j-1].V-testParticles[i][j-1].V);
+          let Pyl = 1 - (isolines[k] - testParticles[i][j-1].V)/(testParticles[i][j].V-testParticles[i][j-1].V);
+          let Pxb = (isolines[k] - testParticles[i][j].V)/(testParticles[i+1][j].V-testParticles[i][j].V);
+          testParticles[i][j].linetype = testParticles[i][j].bit + 2*testParticles[i+1][j].bit + 4*testParticles[i+1][j-1].bit + 8*testParticles[i][j-1].bit; // clumsy but correct
+          testParticles[i][j].filliso(Pxb,Pyr,Pxt,Pyl,isolines[k],isomin,isomax);
+        }
+      }
+    }
+
+    // Show Cartesian Grid
+    push();
+    setLineDash([radius/4, radius/4]);
+    stroke(100, 100, 100, 200);
+    for (let i = 400; i < width; i += fac*radius) {
+      line(i, 0, i, height);
+    }
+    for (let j = fac*radius; j < height; j += fac*radius) {
+      line(0, j, width, j);
+    }
+    pop();
+
+    for (let i=0; i < maxI; i+=1) {
+      for (let j=0; j < maxJ; j+=1) {
+        //testParticles[i][j].physics(particles, boundaries, deltat);
+        testParticles[i][j].draw();
+      }
+    }
+  }
 
   // Show B-Field
   if (abs(Bz)>0) {
@@ -324,16 +370,16 @@ function mousePressed() {
     }
     if (check && !(mouseY < lowerbound && mouseX < rightbound) && abs(q) > 0) 
     {
-      let posX = round(mouseX / radius / fac) * fac * radius;
-      let posY = round(mouseY / radius / fac) * fac * radius;
+      let posX = round(mouseX / (2 * radius * fac)) * 2 * fac * radius;
+      let posY = round(mouseY / (2 * radius * fac)) * 2 * fac * radius;
       p = new particle(posX, posY, 0.0, 0.0, mass, q, fac*radius, mover, false);
       append(particles, p);
     }
   } 
   else if (!(mouseY < lowerbound && mouseX < rightbound)) 
   {
-    let posX = round(mouseX / fac / radius) * fac * radius;
-    let posY = round(mouseY / fac / radius) * fac * radius;
+    let posX = round(mouseX / (2 * fac * radius)) * 2 * fac * radius;
+    let posY = round(mouseY / (2 * fac * radius)) * 2 * fac * radius;
     p = new particle(posX, posY, v0*cos(theta_i), v0*sin(theta_i), mass, q, fac*radius, mover, false);
     append(particles, p);
   }
