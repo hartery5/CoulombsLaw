@@ -87,8 +87,8 @@ class particle {
       vx = this.vx + ax*deltat;
       vy = this.vy + ay*deltat;
 
-      vx = ax*deltat;
-      vy = ay*deltat;
+      //vx = ax*deltat;
+      //vy = ay*deltat;
 
       x = this.x + vx*deltat;
       y = this.y + vy*deltat;
