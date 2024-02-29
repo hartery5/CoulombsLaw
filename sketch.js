@@ -194,15 +194,15 @@ function draw() {
     startpoints = []
     integration_dir = []
     for (let i = 0; i<particles.length; i++){
-        //if (particles[i].q*nQ<0){
-        //  //print("opp")
-        //  continue
-        //}
-        let N = abs(8*particles[i].q);
+        if (particles[i].q*nQ<0){
+          //print("opp")
+          continue
+        }
+        let N = round(abs(8*particles[i].q));
         for (let j=0; j<N;j+=1){
             let th = 2*PI*j/N;
-            let spx = 2*radius*cos(th)+particles[i].x;
-            let spy = 2*radius*sin(th)+particles[i].y;
+            let spx = 2.1*radius*cos(th)+particles[i].x;
+            let spy = 2.1*radius*sin(th)+particles[i].y;
             let intdir = 2*(particles[i].q>0)-1
             startpoints.push([spx,spy])
             integration_dir.push(intdir)
@@ -221,7 +221,7 @@ function draw() {
         let intstep = 0;
         let f = 0.05;
         let pathLength = 0;
-        let arrSpacing = 50;
+        let arrSpacing = 25;
         while ((!halt) && (intstep<100000)){
           let ptraj = new particle(px,py,0,0,1,1,1,false,false);
           for (let j=0; j<particles.length;j++){
@@ -305,16 +305,9 @@ function draw() {
     }
     //print(isomin,isomax);
     isolines = [];
-    isomin = Math.floor(-4);
-    //isomax = 4;
+    isomin = Math.floor(isomin);
+    isomax = Math.ceil(isomax);
     isoscale = 0.5;
-    //for (let i = log(abs(isomin)); i>=-1; i = i - isoscale) {
-    //  append(isolines, Math.sign(isomin)*exp(i));
-    //}
-    //append(isolines, 0.0);
-    //for (let i = -1; i<=log(abs(isomax)); i = i + isoscale) {
-    //  append(isolines, Math.sign(isomax)*exp(i));
-    //}
 
     for (let i = isomin; i<=isomax; i += isoscale) {
       append(isolines, i);
@@ -342,6 +335,7 @@ function draw() {
           let Pxb = (isolines[k] - testParticles[i][j].V)/(testParticles[i+1][j].V-testParticles[i][j].V);
           testParticles[i][j].linetype = testParticles[i][j].bit + 2*testParticles[i+1][j].bit + 4*testParticles[i+1][j-1].bit + 8*testParticles[i][j-1].bit; // clumsy but correct
           testParticles[i][j].filliso(Pxb,Pyr,Pxt,Pyl,isolines[k],isomin,isomax);
+          testParticles[i][j].showiso(Pxb,Pyr,Pxt,Pyl,isolines[k],isomin,isomax);
         }
       }
     }

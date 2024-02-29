@@ -37,8 +37,8 @@ class particle {
         F = Coulomb(this, particles[i]);
         theta = calculateTheta(this, particles[i]);
         r = dist(this.x, this.y, particles[i].x, particles[i].y);
-        if (r < 5){
-          r = 5;  
+        if (r < this.radius){
+          r = this.radius;  
         }
         v += k*particles[i].q/r;
         if (r>this.radius) {
@@ -277,7 +277,7 @@ class particle {
     }
 
     strokeWeight(3);
-    stroke(c);
+    stroke(0);
     noFill();
     switch(this.linetype) {
       case 1:
@@ -362,10 +362,12 @@ class particle {
     let bottom = 0;
     let top = -spacingy;
 
+
+    //strokeWeight(1);
+    //stroke(25);
+    beginShape();
     fill(c);
     noStroke();
-    beginShape(TESS);
-    
     switch(this.linetype){
       case 0:
         break;
