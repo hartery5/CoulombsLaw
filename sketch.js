@@ -221,7 +221,7 @@ function draw() {
         let intstep = 0;
         let f = 0.05;
         let pathLength = 0;
-        let arrSpacing = 25;
+        let arrSpacing = 10;
         while ((!halt) && (intstep<100000)){
           let ptraj = new particle(px,py,0,0,1,1,1,false,false);
           for (let j=0; j<particles.length;j++){
