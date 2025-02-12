@@ -187,7 +187,7 @@ function draw() {
     }
 
     if (nQ==0.0){
-      print("neutral")
+      //print("neutral")
       nQ = 1;
     }
 
@@ -198,7 +198,7 @@ function draw() {
           //print("opp")
           continue
         }
-        let N = round(abs(9*particles[i].q));
+        let N = round(abs(4*particles[i].q));
         for (let j=0; j<N;j+=1){
             let th = 2*PI*j/N;
             let spx = 2.1*radius*cos(th)+particles[i].x;
@@ -219,7 +219,7 @@ function draw() {
         let py = startpoints[i][1];
         let halt = false;
         let intstep = 0;
-        let f = 0.05;
+        let f = 0.2;
         let pathLength = 0;
         let arrSpacing = 80;
         while ((!halt) && (intstep<100000)){
@@ -366,7 +366,7 @@ function draw() {
       }
   
       if (nQ==0.0){
-        print("neutral")
+        //print("neutral")
         nQ = 1;
       }
   

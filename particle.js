@@ -208,7 +208,7 @@ class particle {
       if (showArr && !showV) {
         c1 = color(80, 80, 80, 0);
         c2 = color(255, 255, 255);
-        v = map(log(abs(this.Emag)), -18, -6, 0, 1);
+        v = map(log(abs(this.Emag)), -9, -6, 0, 1);
         c = lerpColor(c1, c2, v);
         stroke(c);
         strokeWeight(2);
